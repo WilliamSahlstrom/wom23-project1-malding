@@ -58,3 +58,5 @@ router.post('/', async (req, res) => {
     console.log("user created:", user)
     res.send({ msg: 'user created', id: user.id })
 })
+
+module.exports = router;

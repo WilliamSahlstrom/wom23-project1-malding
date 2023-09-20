@@ -12,5 +12,6 @@ app.use(cors()); //Vi enablerar cors till alla routes
 app.use(express.json());
 
 //Define routes here
+app.use('/users', userRoutes);
 
 module.exports = app;
