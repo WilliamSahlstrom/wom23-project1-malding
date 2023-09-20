@@ -1,0 +1,45 @@
+@apiUrl = http://localhost:3030/users
+#@apiUrl = https://notes-fredde-23.azurewebsites.net/users
+@token = {{$dotenv TOKEN}}
+
+###
+GET {{apiUrl}}
+Authorization: Bearer {{token}}
+
+
+###
+GET {{apiUrl}}
+Authorization: Bearer {{token}}
+
+### Logga in på /users/login
+POST {{apiUrl}}
+Content-Type: application/json
+
+{
+    "email": "fredde@foo.baz",
+    "password": "Password123"
+}
+
+### skapa ny användare
+POST {{apiUrl}}
+Content-Type: application/json
+
+{
+    "email": "fredde@foo.baz",
+    "password": "Password123"
+}
+
+### 
+PATCH {{apiUrl}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "password": "Password123"
+}
+
+###
+DELETE {{apiUrl}}
+Authorization: Bearer {{token}}
+
+###
