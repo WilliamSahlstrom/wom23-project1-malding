@@ -8,7 +8,7 @@ require('dotenv').config()
 
 
 // disable for production?
-/*router.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
     const users = await prisma.users.findMany()
     console.log("users GET")
     res.send({ 
@@ -26,29 +26,28 @@ router.get('/:id', async (req, res) => {
 
     console.log("users GET ONE")
     res.send({ msg: 'users', user: user })
-}) */
+})
 
 router.post('/login', async (req, res) => {
     try {
         const user = await prisma.users.findUnique({
-            where: {email: req.body.email}
+            where: { email: req.body.email }
         })
 
         if (user == null) {
-            return res.status(404).send({msg: 'ERROR', error: 'User not found'})
+            return res.status(404).send({ msg: 'ERROR', error: 'User not found' })
         }
 
         const match = await bcrypt.compare(req.body.password, user.password)
 
         if (!match) {
-            return res.status(401).send({msg: 'ERROR', error: 'Wrong password'})
+            return res.status(401).send({ msg: 'ERROR', error: 'Wrong password' })
         }
 
         const token = await jwt.sign({ 
             sub: user.id, 
             email: user.email, 
-            name: user.name,
-            expiresIn: '1d'
+            name: user.name
         }, process.env.JWT_SECRET)
 
         res.send({
@@ -59,10 +58,11 @@ router.post('/login', async (req, res) => {
         })
 
     } catch (error) {
-        
+        // Handle other errors, if any
+        console.error(error);
+        res.status(500).send({ msg: 'ERROR', error: 'Internal server error' });
     }
-
-})
+});
 
 router.post('/', async (req, res) => {
 
@@ -79,7 +79,7 @@ router.post('/', async (req, res) => {
     res.send({ msg: 'user created', id: user.id })
 })
 
-/*
+
 router.patch('/:id', async (req, res) => {
 
     if (req.params.id != req.authUser.sub) {
@@ -134,6 +134,6 @@ router.delete('/:id', async (req, res) => {
         })
     }
 })
-*/
+
 
 module.exports = router

@@ -11,8 +11,8 @@ Authorization: Bearer {{token}}
 GET {{apiUrl}}
 Authorization: Bearer {{token}}
 
-### Logga in på /users/login
-POST {{apiUrl}}
+### Logga in på /users/login  <--- Here
+POST {{apiUrl}}/login
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{apiUrl}}
+DELETE {{apiUrl}}/650d7698914bb30bb07b1863
 Authorization: Bearer {{token}}
 
 ###
