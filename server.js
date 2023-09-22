@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes); // Authentication routes
-app.use('/boards', boardRoutes); // Include board routes
+app.use('/boards', verifyToken, boardRoutes); // Include board routes
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
