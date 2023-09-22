@@ -10,17 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model pokemon {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  type String
-}
-
-model users {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String   @unique
-  name    String?
-  password String?
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
