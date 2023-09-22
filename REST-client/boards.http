@@ -1,0 +1,19 @@
+@apiUrl = http://localhost:3030/boards
+#@apiUrl = https://notes-fredde-23.azurewebsites.net/users
+@token = {{$dotenv TOKEN}}
+
+# Sample board creation POST
+###
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "My New Board"
+}
+
+
+###
+#Sample board deletion
+DELETE {{apiUrl}}/
+Authorization: Bearer {{token}}

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-module.exports = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     console.log('auth middleware');
     try {
         // Check if the Authorization header is present
@@ -33,3 +33,4 @@ module.exports = (req, res, next) => {
     }
 };
 
+module.exports = { verifyToken };
