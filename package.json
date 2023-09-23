@@ -2,7 +2,7 @@
   "name": "wom23-project1-malding",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/server.js",
+  "main": "./server.js",
   "directories": {
     "test": "test"
   },
