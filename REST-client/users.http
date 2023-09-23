@@ -8,7 +8,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET {{apiUrl}}
+GET {{apiUrl}}/650d7477886a3d6faebb545e
 Authorization: Bearer {{token}}
 
 ### Logga in på /login  <--- Here
@@ -25,8 +25,8 @@ POST {{apiUrl}}
 Content-Type: application/json
 
 {
-    "email": "will@fo.baz",
-    "password": "Password1234"
+    "email": "testin@testing.baz",
+    "password": "lolwhatever"
 }
 
 ### 
