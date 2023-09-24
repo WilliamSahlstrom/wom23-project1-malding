@@ -16,7 +16,7 @@ POST {{apiUrl}}/login
 Content-Type: application/json
 
 {
-    "email": "will@fo.baz",
+    "email": "willvperi@fo.baz",
     "password": "Password1234"
 }
 
@@ -25,8 +25,8 @@ POST {{apiUrl}}
 Content-Type: application/json
 
 {
-    "email": "testin@testing.baz",
-    "password": "lolwhatever"
+    "email": "willvperi@fo.baz",
+    "password": "Password1234"
 }
 
 ### 

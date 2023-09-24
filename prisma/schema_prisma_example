@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
+/*generator client {
   provider = "prisma-client-js"
 }
 
@@ -17,12 +17,21 @@ model users {
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  board Board @relation(fields: [boardId], references: [id])
+  boardId String @db.ObjectId
 }
 
 model Board {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
-  userId String?
-  createdAt DateTime? @default(now()) 
-  updatedAt DateTime? @default(now())
+  users users[]
+  notes Note[]
 }
+
+model Note {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+  color String
+  board Board @relation(fields: [boardId], references: [id])
+  boardId String @db.ObjectId
+}*/
