@@ -72,7 +72,8 @@ router.post('/', async (req, res) => {
         data: {
             email: req.body.email,
             name: req.body.name,
-            password: hash
+            password: hash,
+            boardIds: req.body.board
         },
     })
     console.log("user created:", user)

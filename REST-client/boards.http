@@ -9,7 +9,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "name": "My New Board"
+    "name": "Bob De Blum"
 }
 
 
