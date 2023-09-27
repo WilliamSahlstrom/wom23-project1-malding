@@ -30,7 +30,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        const user = await prisma.users.findUnique({
+        const user = await prisma.user.findUnique({
             where: { email: req.body.email }
         })
 
@@ -68,12 +68,16 @@ router.post('/', async (req, res) => {
 
     const hash = await bcrypt.hash(req.body.password, 12)
 
-    const user = await prisma.users.create({
+    const user = await prisma.user.create({
         data: {
             email: req.body.email,
             name: req.body.name,
             password: hash,
-            boardIds: req.body.board
+            boards: {
+                create: {
+                    boards: req.body.id
+                }
+            }
         },
     })
     console.log("user created:", user)

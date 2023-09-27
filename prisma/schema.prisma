@@ -10,19 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
+model User {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  email     String    @unique
   password  String
-  name      String?
-  boardIds  String[]
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now())
+  boards    Board[]   @relation(fields: [boardIds], references: [id])
+  boardIds  String[]  @db.ObjectId
 }
 
 model Board {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  userId String?
-  createdAt DateTime? @default(now()) 
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userIds   String[]  @db.ObjectId
+  name      String?
+  users     User[]    @relation(fields: [userIds], references: [id])
+  createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
 }

@@ -2,6 +2,11 @@
 #@apiUrl = https://notes-fredde-23.azurewebsites.net/users
 @token = {{$dotenv TOKEN}}
 
+# Sample all boards from user GET
+###
+GET {{apiUrl}}
+Authorization: Bearer {{token}}
+
 # Sample board creation POST
 ###
 POST {{apiUrl}}
@@ -9,9 +14,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "name": "Bob De Blum"
+    "name": "maldingboard",
 }
-
 
 ###
 #Sample board deletion

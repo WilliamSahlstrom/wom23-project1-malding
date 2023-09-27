@@ -7,7 +7,11 @@ const prisma = new PrismaClient();
 router.get('/', async (req, res) => {
     try {
         const boards = await prisma.board.findMany({
-            where: { userId: req.authUser.sub }
+            where: { 
+                userIds: { 
+                    hasSome: [req.authUser.sub]
+                }
+            }
         });
         res.send({
             msg: 'Success',
@@ -54,9 +58,11 @@ router.post('/', async (req, res) => {
     try {
         const board = await prisma.board.create({
             data: {
-                userId: req.authUser.sub,
                 name: req.body.name,
-            }
+                users: {
+                    connect: { id: req.authUser.sub },
+                    }
+                }
         });
         res.send({
             msg: 'Success',
