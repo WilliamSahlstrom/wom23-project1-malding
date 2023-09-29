@@ -1,10 +1,17 @@
 @apiUrl = http://localhost:3030/boards
-#@apiUrl = https://notes-fredde-23.azurewebsites.net/users
+
 @token = {{$dotenv TOKEN}}
+
+@wsApiUrl = http://localhost:5500/ws-frontend/index.html?access_token={{token}}&board=
 
 # Sample all boards from user GET
 ###
 GET {{apiUrl}}
+Authorization: Bearer {{token}}
+
+# Sample ws server board GET
+###
+GET {{wsApiUrl}}65141c4479154dba028bd8df
 Authorization: Bearer {{token}}
 
 # Sample board creation POST
