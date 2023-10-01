@@ -14,7 +14,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "name": "maldingboard",
+    "name": "williams maldingboard"
 }
 
 ###
