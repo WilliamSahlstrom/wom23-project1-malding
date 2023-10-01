@@ -13,8 +13,13 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.use('/public', express.static(__dirname + '/public'))
+app.get('/', (req, res) => {
+    console.log(`GET request to / from ${req.ip}`)
+    res.send('Mainpage!')
+})
 
+
+app.use('/public', express.static(__dirname + '/public'))
 app.use('/users', userRoutes);
 app.use('/boards', verifyToken, boardRoutes); 
 

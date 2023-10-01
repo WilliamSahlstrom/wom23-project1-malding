@@ -27,45 +27,43 @@ main {
     text-align: center;
 }
 
-/* Style the form container */
-.login-form {
+/* Style the call-to-action section */
+.cta-section {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
-/* Style form labels and inputs */
-form label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-form input {
-    width: 100%;
-    padding: 10px;
+h2 {
+    font-size: 24px;
     margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
 }
 
-/* Style the login button */
-form button {
+p {
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* Style the buttons */
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.button {
     display: inline-block;
     padding: 10px 20px;
     background-color: #333;
     color: #fff;
     text-decoration: none;
     font-size: 18px;
-    border: none;
     border-radius: 5px;
-    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-form button:hover {
+.button:hover {
     background-color: #555;
 }
 
@@ -82,16 +80,13 @@ footer {
     main {
         padding: 10px;
     }
-
-    .login-form {
-        padding: 10px;
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
     }
-
-    form label {
-        font-size: 18px;
-    }
-
-    form input {
-        font-size: 16px;
+    
+    .button {
+        margin-top: 10px;
     }
 }
