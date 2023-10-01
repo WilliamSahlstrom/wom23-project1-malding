@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 // restrict for production
 router.get('/:id', async (req, res) => {
 
-    const user = await prisma.users.findUnique({
+    const user = await prisma.user.findUnique({
         where: {id: req.params.id}
     })
 

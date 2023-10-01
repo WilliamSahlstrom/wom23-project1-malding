@@ -8,7 +8,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET {{apiUrl}}/650d7477886a3d6faebb545e
+GET {{apiUrl}}/65140bbf3923bcbdedc859a9
 Authorization: Bearer {{token}}
 
 ### Logga in på /login  <--- Here
