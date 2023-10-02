@@ -14,18 +14,30 @@ model User {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   email     String    @unique
   password  String
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @default(now())
+  name      String?
+  secret    String
   boards    Board[]   @relation(fields: [boardIds], references: [id])
   boardIds  String[]  @db.ObjectId
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now())
 }
 
 model Board {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userIds   String[]  @db.ObjectId
   name      String?
+  userIds   String[]  @db.ObjectId
+  noteIds   String[]  @db.ObjectId
   users     User[]    @relation(fields: [userIds], references: [id])
+  notes     Note[]    @relation(fields: [noteIds], references: [id])
   createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+}
+
+model Note {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  text      String?
+  boards    Board[]   @relation(fields: [boardIds], references: [id])
+  boardIds  String[]  @db.ObjectId
+  createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now())
 }

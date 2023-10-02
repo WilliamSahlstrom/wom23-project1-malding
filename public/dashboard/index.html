@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malding WebSocket Board</title>
+    <link rel="stylesheet" href="/public/dashboard/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <div class="dropdown-container">
+            <label for="boardDropdown">Select Board:</label>
+            <select id="boardDropdown" onchange="changeBoard()">
+            </select>
+        </div>
+        <div class="notes">
+            <div id="create">
+                <i class="fa-solid fa-plus"></i>
+                <div class="createBox">
+                    <div class="innerCreateBox">
+                        <textarea placeholder="Write Here . . ." id="userInput" maxlength="160"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/public/dashboard/app.js"></script>
+    <script src="/public/dashboard/selectBoard.js"></script>
+</body>
+</html>

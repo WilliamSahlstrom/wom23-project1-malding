@@ -11,8 +11,8 @@ require('dotenv').config()
 router.get('/', async (req, res) => {
     const users = await prisma.users.findMany()
     console.log("users GET")
-    res.send({ 
-        msg: 'users', 
+    res.send({
+        msg: 'users',
         users: users
     })
 })
@@ -21,13 +21,12 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 
     const user = await prisma.user.findUnique({
-        where: {id: req.params.id}
+        where: { id: req.params.id }
     })
 
     console.log("users GET ONE")
     res.send({ msg: 'users', user: user })
 })
-
 router.post('/login', async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
@@ -44,16 +43,16 @@ router.post('/login', async (req, res) => {
             return res.status(401).send({ msg: 'ERROR', error: 'Wrong password' })
         }
 
-        const token = await jwt.sign({ 
-            sub: user.id, 
-            email: user.email, 
+        const token = await jwt.sign({
+            sub: user.id,
+            email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, process.env.JWT_SECRET)
+        }, user.secret)
 
         res.send({
-            token: token, 
-            msg: "Login successful", 
+            token: token,
+            msg: "Login successful",
             userId: user.id,
             userEmail: user.email
         })
@@ -69,6 +68,11 @@ router.post('/', async (req, res) => {
 
     const hash = await bcrypt.hash(req.body.password, 12)
 
+    const generateJWTSecret = () => {
+        return require('crypto').randomBytes(48).toString('hex')
+    }
+    const secretKey = generateJWTSecret()
+
     const user = await prisma.user.create({
         data: {
             email: req.body.email,
@@ -78,7 +82,8 @@ router.post('/', async (req, res) => {
                 create: {
                     boards: req.body.id
                 }
-            }
+            },
+            secret: secretKey
         },
     })
     console.log("user created:", user)

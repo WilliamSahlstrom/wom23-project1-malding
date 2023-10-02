@@ -1,0 +1,36 @@
+@apiUrl = http://localhost:3030/notes
+#@apiUrl = https://notes-fredde-23.azurewebsites.net/users
+@token = {{$dotenv TOKEN}}
+
+###
+GET {{apiUrl}}
+Authorization: Bearer {{token}}
+
+
+###
+GET {{apiUrl}}/651ac474b07be475f75afee7
+Authorization: Bearer {{token}}
+
+### 
+POST {{apiUrl}}/651ac474b07be475f75afee7
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "text": "williams maldingtext"
+}
+
+### 
+PATCH {{apiUrl}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "text": "williams patched maldingtext"
+}
+
+###
+DELETE {{apiUrl}}/65141c4479154dba028bd8df
+Authorization: Bearer {{token}}
+
+###
