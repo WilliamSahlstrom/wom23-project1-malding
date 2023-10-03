@@ -4,6 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const userRoutes = require('./routes/userRoutes');
 const boardRoutes = require('./routes/boardRoutes');
+const noteRoutes = require('./routes/noteRoutes');
 const { verifyToken } = require('./middleware/auth'); 
 
 const app = express();
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 app.use('/public', express.static(__dirname + '/public'))
 app.use('/users', userRoutes);
 app.use('/boards', verifyToken, boardRoutes); 
+app.use('/notes', verifyToken, noteRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}/public`);

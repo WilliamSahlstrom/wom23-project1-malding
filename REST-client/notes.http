@@ -3,34 +3,29 @@
 @token = {{$dotenv TOKEN}}
 
 ###
-GET {{apiUrl}}
-Authorization: Bearer {{token}}
-
-
-###
 GET {{apiUrl}}/651ac474b07be475f75afee7
 Authorization: Bearer {{token}}
 
 ### 
-POST {{apiUrl}}/651ac474b07be475f75afee7
+POST {{apiUrl}}/651abcf1de52a7d510892394
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "text": "williams maldingtext"
+    "text": "niklas maldingtext"
 }
 
 ### 
-PATCH {{apiUrl}}
+PATCH {{apiUrl}}/651c4404d103b9823a84f88d
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "text": "williams patched maldingtext"
+    "text": "williams patched maldingtext v2"
 }
 
 ###
-DELETE {{apiUrl}}/65141c4479154dba028bd8df
+DELETE {{apiUrl}}/651c7b528aa849752ba02df3
 Authorization: Bearer {{token}}
 
 ###

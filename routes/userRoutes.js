@@ -3,9 +3,9 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { PrismaClient } = require('@prisma/client')
+const { verifyToken } = require('../middleware/auth')
 const prisma = new PrismaClient()
 require('dotenv').config()
-
 
 // disable for production?
 router.get('/', async (req, res) => {
@@ -27,7 +27,7 @@ router.get('/:id', async (req, res) => {
     console.log("users GET ONE")
     res.send({ msg: 'users', user: user })
 })
-router.post('/login', async (req, res) => {
+router.post('/login',async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { email: req.body.email }

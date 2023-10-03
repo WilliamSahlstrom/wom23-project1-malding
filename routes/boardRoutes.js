@@ -7,8 +7,8 @@ const prisma = new PrismaClient();
 router.get('/', async (req, res) => {
     try {
         const boards = await prisma.board.findMany({
-            where: { 
-                userIds: { 
+            where: {
+                userIds: {
                     hasSome: [req.authUser.sub]
                 }
             }
@@ -61,8 +61,8 @@ router.post('/', async (req, res) => {
                 name: req.body.name,
                 users: {
                     connect: { id: req.authUser.sub },
-                    }
                 }
+            }
         });
         res.send({
             msg: 'Success',
