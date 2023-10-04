@@ -80,12 +80,29 @@ router.post('/', async (req, res) => {
 // Update a board by ID
 router.patch('/:id', async (req, res) => {
     try {
+        // Check if the user with the provided email exists
+        const user = await prisma.user.findUnique({
+            where: {
+                email: req.body.userEmail,
+            },
+        });
+
+        if (!user) {
+            return res.status(404).send({
+                msg: 'ERROR',
+                error: 'User not found',
+            });
+        }
+
+        // Connect the user to the board
         const board = await prisma.board.update({
             where: {
                 id: req.params.id,
             },
             data: {
-                name: req.body.name,
+                users: {
+                    connect: { email: req.body.userEmail }
+                }
             }
         });
         res.send({

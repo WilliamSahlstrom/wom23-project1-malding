@@ -3,7 +3,7 @@ const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// GET all notes
+// GET all notes from a specific board
 router.get('/:id', async (req, res) => {
     try {
         const note = await prisma.note.findMany({

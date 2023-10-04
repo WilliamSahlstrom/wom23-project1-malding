@@ -24,6 +24,7 @@ console.log('Constructed URL with boardIds:', WS_URL);
 
 //console.log(WS_URL)
 let noteText;
+let noteId;
 
 async function test() {
     try {
@@ -69,7 +70,8 @@ async function postNote() {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(data.notes);
+            console.log(data.note);
+            noteId = data.note.id
         } else {
             console.error("not good :(");
         }
@@ -87,7 +89,9 @@ async function deleteNoteFromDatabase(noteId) {
             }
         });
         if (response.ok) {
-            console.log(`Note with ID ${noteId} deleted successfully.`);
+            const data = await response.json();
+            console.log(`Note with ID ${data.note.id} deleted successfully.`);
+            noteId = data.note.id
         } else {
             console.error(`Failed to delete note with ID ${noteId}.`);
         }
@@ -110,17 +114,23 @@ socket.onopen = function (event) {
 socket.onmessage = function (event) {
     console.log('Received message:', event.data);
     const data = JSON.parse(event.data);
+    console.log(data)
 
-    if (data.type == 'createNote') {
+    if (data.type === 'createNote') {
         // Call divStyle to create the note on all clients when a "createNote" message is received
-        divStyle(data.text);
-    } 
-    else if (data.type == 'error') {
-        console.log('Error' + data.type);
+        divStyle(data.text, data.id);
     }
 
-    if (data.type =='selectBoard') {
+    if (data.type ==='selectBoard') {
         test();
+    }
+
+    if (data.type ==='deleteNote') {
+        divRemove(data.id)
+    }
+
+    if (data.type == 'error') {
+        console.log('Error' + data.type);
     }
 };
 
@@ -180,12 +190,14 @@ function divStyle(text, noteId) {
 
     div.setAttribute('data-note-id', noteId);
     // Add a 'dblclick' event listener to the new 'div' element for removing the note
-    div.addEventListener('dblclick', function () {
+    div.addEventListener('dblclick', async function () {
         // Get the note's ID from the data attribute
         const noteId = div.getAttribute('data-note-id');
         console.log(noteId);
         // Call a function to delete the note from the database
-        deleteNoteFromDatabase(noteId);
+        await deleteNoteFromDatabase(noteId);
+
+        await sendWebSocketDeleteMessage()
         // Remove the clicked note from the DOM
         div.remove();
     });
@@ -197,6 +209,18 @@ function divStyle(text, noteId) {
     notes.appendChild(div);
 }
 
+// Function to remove a note by its ID
+function divRemove(noteId) {
+    console.log('Removing note with ID:', noteId);
+    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+    if (noteElement) {
+        console.log('Found element to remove:', noteElement);
+        noteElement.remove();
+    } else {
+        console.log('Note element not found for ID:', noteId);
+    }
+}
+
 // Modify the sendWebSocketMessage function to only send WebSocket message
 async function sendWebSocketMessage() {
     if (socket.readyState === WebSocket.OPEN) {
@@ -204,6 +228,19 @@ async function sendWebSocketMessage() {
         socket.send(JSON.stringify({
             type: 'createNote',
             text: noteText,
+            id: noteId
+        }));
+    } else {
+        console.error('WebSocket is not open yet. Wait for the connection to establish.');
+    }
+}
+
+async function sendWebSocketDeleteMessage() {
+    if (socket.readyState === WebSocket.OPEN) {
+        // Send a WebSocket message to the server to broadcast the note creation
+        socket.send(JSON.stringify({
+            type: 'deleteNote',
+            id: noteId,
         }));
     } else {
         console.error('WebSocket is not open yet. Wait for the connection to establish.');
@@ -216,15 +253,15 @@ document.querySelector('.createBox').addEventListener('keydown', async (e) => {
     if (e && e.keyCode == 13) {
         // Call the 'divStyle' function with the input value
         noteText = input.value;
+        // Call postNote to save the note to the server/database
+        await postNote();
         // Create a new note locally on the client
-        divStyle(noteText);
+        divStyle(noteText, noteId);
         // Clear the input field
         input.value = "";
         // Hide the 'createBox' element by setting its style to "none"
         createBox.style.display = "none";
         // Now, call the function to send the WebSocket message
         sendWebSocketMessage();
-        // Call postNote to save the note to the server/database
-        await postNote();
     }
 })

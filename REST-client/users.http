@@ -25,7 +25,7 @@ POST {{apiUrl}}
 Content-Type: application/json
 
 {
-    "email": "william@test.com",
+    "email": "niklas@test.com",
     "password": "Password1234"
 }
 

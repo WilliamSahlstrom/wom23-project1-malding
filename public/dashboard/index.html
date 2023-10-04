@@ -13,6 +13,17 @@
             <label for="boardDropdown">Select Board:</label>
             <select id="boardDropdown" onchange="changeBoard()">
             </select>
+            <button id="addUserBtn">Add User</button>
+        </div>
+        <div id="addUserPopup" class="popup-container">
+            <div class="popup">
+                <h2>Add User to Board</h2>
+                <input type="text" id="userEmailInput" placeholder="Enter user email">
+                <div class="popup-buttons">
+                    <button id="confirmAddUserBtn">Add</button>
+                    <button id="cancelAddUserBtn">Cancel</button>
+                </div>
+            </div>
         </div>
         <div class="notes">
             <div id="create">
@@ -22,6 +33,16 @@
                         <textarea placeholder="Write Here . . ." id="userInput" maxlength="160"></textarea>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup-container" id="deleteConfirmationPopupContainer">
+        <div class="popup">
+            <h2>Confirm Deletion</h2>
+            <p class="popup-text">Delete this note?</p>
+            <div class="popup-buttons">
+                <button id="confirmDeleteBtn">Yes</button>
+                <button id="cancelDeleteBtn">No</button>
             </div>
         </div>
     </div>

@@ -104,3 +104,84 @@ body {
     user-select: none;
     font-size: 1.45em;
 }
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+.popup {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+#confirmDeleteBtn, #cancelDeleteBtn, #confirmAddUserBtn, #cancelAddUserBtn {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+#confirmDeleteBtn {
+    background-color: #e74c3c;
+    color: #fff;
+}
+#cancelDeleteBtn {
+    background-color: #3498db;
+    color: #fff;
+}
+#confirmAddUserBtn {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+#cancelAddUserBtn {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.popup .popup-text {
+    text-align: center;
+}
+#addUserPopup {
+    display: none;
+}
+
+#addUserPopup .popup {
+    width: 300px;
+}
+
+#addUserPopup input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#addUserPopup .popup-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+#addUserBtn {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #2ecc71;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px; /* Adjust as needed */
+}
+
+#addUserBtn:hover {
+    background-color: #27ae60;
+}

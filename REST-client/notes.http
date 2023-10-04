@@ -26,6 +26,7 @@ Content-Type: application/json
 
 ###
 DELETE {{apiUrl}}/651c7b528aa849752ba02df3
+Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###
