@@ -1,8 +1,4 @@
-const url = WS_URL.slice(1)
-const urlParams = new URLSearchParams(url.slice(url.indexOf("?") + 1));
-console.log("vafittan:" + urlParams.getAll('board'))
-
-boards = urlParams.getAll('board');
+boards = boardIds;
 const userBoards = []
 boards.forEach(board => {
     userBoards.push(board)

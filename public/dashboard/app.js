@@ -7,8 +7,9 @@ if (WS_TOKEN) {
         const tokenParts = WS_TOKEN.split('.');
         payload = JSON.parse(atob(tokenParts[1]));
         boardIds = payload.boardIds;
-        console.log("här: " + boardIds);
+        console.log("här: ", boardIds, payload.email);
         localStorage.setItem('currentBoard', boardIds[0]);
+        localStorage.setItem('userEmail', payload.email)
     } catch (e) {
         console.error(e);
     }
@@ -99,7 +100,77 @@ async function deleteNoteFromDatabase(noteId) {
         console.error(error);
     }
 }
+async function addUser(userEmail) {
+    try {
+        const boardId = localStorage.getItem('currentBoard');
+        const response = await fetch(`http://localhost:3030/boards/${boardId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${WS_TOKEN}`
+            },
+            body: JSON.stringify({
+                email: userEmail
+            })
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(`${userEmail} added to board`);
+            sendWebSocketAddUserMessage(userEmail)
+        } else {
+            console.error("not good :(");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function updateAddedUsersClient(userEmail) {
+    try {
+        const response = await fetch(`http://localhost:3030/boards`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${WS_TOKEN}`
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.token)
+            localStorage.setItem("access_token", data.token);
+            WS_TOKEN = localStorage.getItem("access_token")
+            console.log(data.boards)
+            console.log(`A board has been added to ${userEmail}`);
+            updateBoardsFromArray(data.boards);
+        } else {
+            console.error("not good :(");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
 
+function updateBoardsFromArray(boardNames) {
+    var dropdown = document.getElementById("boardDropdown");
+
+    // Clear existing options
+    dropdown.innerHTML = "";
+
+    // Add options from the array
+    boardNames.forEach(function (boardName) {
+        console.log("Board added to dropdown " + boardName.id)
+        var option = document.createElement("option");
+        option.setAttribute("id", boardName.id);
+        option.value = boardName.id;
+        option.text = boardName.id;
+        dropdown.add(option);
+
+        // Create corresponding boards in the document
+        var board = document.createElement("div");
+        board.id = boardName.id;
+        board.className = "board";
+        document.body.appendChild(board);
+    });
+}
 
 // Create a WebSocket connection
 const socket = new WebSocket(WS_URL, ['Bearer', WS_TOKEN]);
@@ -130,6 +201,10 @@ socket.onmessage = function (event) {
         divRemove(data.id);
     }
 
+    if (data.type === 'addUser') {
+        if(data.email === localStorage.getItem('userEmail')) updateAddedUsersClient(data.email)
+    }
+
     if (data.type === 'error') {
         console.log('Error' + data.type);
     }
@@ -149,6 +224,42 @@ socket.onclose = function (event) {
         console.error('Connection abruptly closed');
     }
 };
+
+document.addEventListener('DOMContentLoaded', function () {
+    const addUserBtn = document.getElementById('addUserBtn');
+    const addUserPopup = document.getElementById('addUserPopup');
+
+    addUserBtn.addEventListener('click', function () {
+       addUserPopup.style.display = 'flex';
+    });
+
+    const cancelAddUserBtn = document.getElementById('cancelAddUserBtn');
+    cancelAddUserBtn.addEventListener('click', function () {
+       addUserPopup.style.display = 'none';
+    });
+ });
+
+ document.addEventListener('DOMContentLoaded', function () {
+    const addUserPopup = document.getElementById('addUserPopup');
+    const confirmAddUserBtn = document.getElementById('confirmAddUserBtn');
+    const cancelAddUserBtn = document.getElementById('cancelAddUserBtn');
+    const userEmailInput = document.getElementById('userEmailInput');
+ 
+    confirmAddUserBtn.addEventListener('click', async function () {
+       // You can add your logic here to handle adding a user
+       const userEmail = userEmailInput.value;
+ 
+       addUser(userEmail)
+ 
+       // Close the popup
+       addUserPopup.style.display = 'none';
+    });
+ 
+    cancelAddUserBtn.addEventListener('click', function () {
+       // Close the popup without performing any action
+       addUserPopup.style.display = 'none';
+    });
+ });
 
 /* Notes delen */
 // Select the element with the class 'createBox' and get the first matching element
@@ -242,6 +353,18 @@ async function sendWebSocketDeleteMessage(noteId) {
         socket.send(JSON.stringify({
             type: 'deleteNote',
             id: noteId,
+        }));
+    } else {
+        console.error('WebSocket is not open yet. Wait for the connection to establish.');
+    }
+}
+
+async function sendWebSocketAddUserMessage(userEmail) {
+    if (socket.readyState === WebSocket.OPEN) {
+        // Send a WebSocket message to the server to broadcast the note deletion
+        socket.send(JSON.stringify({
+            type: 'addUser',
+            email: userEmail
         }));
     } else {
         console.error('WebSocket is not open yet. Wait for the connection to establish.');

@@ -2,17 +2,15 @@
 
 @token = {{$dotenv TOKEN}}
 
-@wsApiUrl = http://localhost:5500/ws-frontend/index.html?access_token={{token}}&board=
-
 # Sample all boards from user GET
 ###
 GET {{apiUrl}}
+Content-Type: application/json
 Authorization: Bearer {{token}}
 
-# Sample ws server board GET
-###
-GET {{wsApiUrl}}65141c4479154dba028bd8df
-Authorization: Bearer {{token}}
+{
+    "email": "william@test.com"
+}
 
 # Sample board creation POST
 ###

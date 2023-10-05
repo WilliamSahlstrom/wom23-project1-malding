@@ -114,18 +114,18 @@ body {
     background: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
-}
-.popup {
+ }
+ .popup {
     background: #fff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-}
-.popup-buttons {
+ }
+ .popup-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-}
+ }
 #confirmDeleteBtn, #cancelDeleteBtn, #confirmAddUserBtn, #cancelAddUserBtn {
     padding: 10px 20px;
     cursor: pointer;
@@ -140,14 +140,22 @@ body {
     background-color: #3498db;
     color: #fff;
 }
+#confirmAddUserBtn,
+#cancelAddUserBtn {
+   padding: 10px 20px;
+   cursor: pointer;
+   border: none;
+   border-radius: 5px;
+}
+
 #confirmAddUserBtn {
-    background-color: #2ecc71;
-    color: #fff;
+   background-color: #2ecc71;
+   color: #fff;
 }
 
 #cancelAddUserBtn {
-    background-color: #e74c3c;
-    color: #fff;
+   background-color: #e74c3c;
+   color: #fff;
 }
 
 .popup .popup-text {

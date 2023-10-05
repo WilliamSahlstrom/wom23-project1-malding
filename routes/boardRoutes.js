@@ -2,10 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const jwt = require('jsonwebtoken')
 
 // GET all boards
 router.get('/', async (req, res) => {
     try {
+        const user = await prisma.user.findUnique({
+            where: { id: (req.authUser.sub) }
+        })
+
         const boards = await prisma.board.findMany({
             where: {
                 userIds: {
@@ -13,9 +18,18 @@ router.get('/', async (req, res) => {
                 }
             }
         });
+
+        const token = await jwt.sign({
+            sub: user.id,
+            email: user.email,
+            name: user.name,
+            boardIds: user.boardIds
+        }, user.secret)
+
         res.send({
             msg: 'Success',
             boards: boards,
+            token: token,
             authorizedUserId: req.authUser.sub
         });
     } catch (error) {
@@ -83,7 +97,7 @@ router.patch('/:id', async (req, res) => {
         // Check if the user with the provided email exists
         const user = await prisma.user.findUnique({
             where: {
-                email: req.body.userEmail,
+                email: req.body.email,
             },
         });
 
@@ -101,7 +115,7 @@ router.patch('/:id', async (req, res) => {
             },
             data: {
                 users: {
-                    connect: { email: req.body.userEmail }
+                    connect: { id: user.id }
                 }
             }
         });
