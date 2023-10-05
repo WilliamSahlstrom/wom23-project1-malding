@@ -121,15 +121,16 @@ socket.onmessage = function (event) {
         divStyle(data.text, data.id);
     }
 
-    if (data.type ==='selectBoard') {
+    if (data.type === 'selectBoard') {
         test();
     }
 
-    if (data.type ==='deleteNote') {
-        divRemove(data.id)
+    if (data.type === 'deleteNote') {
+        // Remove the note from the DOM on the client if it exists
+        divRemove(data.id);
     }
 
-    if (data.type == 'error') {
+    if (data.type === 'error') {
         console.log('Error' + data.type);
     }
 };
@@ -197,7 +198,7 @@ function divStyle(text, noteId) {
         // Call a function to delete the note from the database
         await deleteNoteFromDatabase(noteId);
 
-        await sendWebSocketDeleteMessage()
+        await sendWebSocketDeleteMessage(noteId)
         // Remove the clicked note from the DOM
         div.remove();
     });
@@ -235,9 +236,9 @@ async function sendWebSocketMessage() {
     }
 }
 
-async function sendWebSocketDeleteMessage() {
+async function sendWebSocketDeleteMessage(noteId) {
     if (socket.readyState === WebSocket.OPEN) {
-        // Send a WebSocket message to the server to broadcast the note creation
+        // Send a WebSocket message to the server to broadcast the note deletion
         socket.send(JSON.stringify({
             type: 'deleteNote',
             id: noteId,
