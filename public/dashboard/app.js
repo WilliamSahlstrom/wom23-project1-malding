@@ -29,16 +29,16 @@ const baseUrl = `wss://malding-ws-api.azurewebsites.net?access_token=${WS_TOKEN}
 const WS_URL = `ws://localhost:5500?access_token=${WS_TOKEN}&board=${boardIdsString}`
 console.log('Constructed URL with boardIds:', WS_URL)
 
-//console.log(WS_URL)
+
 let noteText;
 let noteId;
-
+// Hämtar notes för den boarden som sparats i localstorage 
+// och när man bytit board via dropdown
 async function test() {
     try {
         const boardId = localStorage.getItem('currentBoard');
         const response = await fetch(`http://localhost:3030/notes/${boardId}`, {
             method: "GET",
-
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${WS_TOKEN}`
@@ -78,7 +78,8 @@ async function postNote() {
         if (response.ok) {
             const data = await response.json();
             console.log(data.note);
-            noteId = data.note.id
+            // Now, call the function to send the WebSocket message
+            sendWebSocketMessage(data.note);
         } else {
             console.error("not good :(");
         }
@@ -124,8 +125,9 @@ socket.onmessage = function (event) {
     console.log(data)
 
     if (data.type === 'createNote') {
-        // Call divStyle to create the note on all clients when a "createNote" message is received
-        divStyle(data.text, data.id);
+        // Call divStyle to create note on all clients who have currently selected the board
+        // that was updated when a "createNote" message is received
+        if(localStorage.getItem('currentBoard') === data.board)  divStyle(data.text, data.id);
     }
 
     if (data.type === 'selectBoard') {
@@ -162,6 +164,7 @@ socket.onclose = function (event) {
 };
 
 /* Notes delen */
+/*
 // Select the element with the class 'createBox' and get the first matching element
 let createBox = document.getElementsByClassName('createBox')[0];
 
@@ -172,35 +175,38 @@ let notes = document.getElementsByClassName('notes')[0];
 let input = document.getElementById('userInput');
 
 // Initialize a variable to keep track of the color index
-let i = 0;
+let iColor = 0;
 
 // Add a 'click' event listener to the element with the ID 'create'
 document.getElementById("create").addEventListener("click", function () {
     // Display the 'createBox' element by setting its style to "block"
     createBox.style.display = "block";
 });
-
+*/
+/*
 // Function to generate a random color
 function color() {
     let randomColor = ["#c2ff3d", "#ff3de8", "3dc2ff", "#04e022", "#bc83e6", "#ebb328"];
     // Check if the index 'i' exceeds the color array length, and reset it if necessary
-    if (i > randomColor.length - 1) {
-        i = 0;
+    if (iColor > randomColor.length - 1) {
+        iColor = 0;
     }
     // Return the color at the current index and increment 'i'
-    return randomColor[i++];
+    return randomColor[iColor++];
 }
 
 // Function to create and style a new note
 function divStyle(text, noteId) {
-    // Create a new 'div' element
     let div = document.createElement('div');
-    // Add a class 'note' to the new 'div' element
     div.className = 'note';
-    // Set the inner HTML of the 'div' element with the provided text
-    div.innerHTML = '<div class="details">' + '<h3>' + text + '<h3>' + '</div>';
-
     div.setAttribute('data-note-id', noteId);
+    // Set the inner HTML with a div for the note and h3 for its text
+    div.innerHTML = '<div class="details">' + '<h3>' + text + '<h3>' + '</div>';
+    // Set the background color of the note
+    div.setAttribute('style', 'background:' + color() + '');
+    // Append the new note to the 'notes' container
+    notes.appendChild(div);
+
     // Add a 'dblclick' event listener to the new 'div' element for removing the note
     div.addEventListener('dblclick', async function () {
         // Get the note's ID from the data attribute
@@ -208,19 +214,14 @@ function divStyle(text, noteId) {
         console.log(noteId);
         // Call a function to delete the note from the database
         await deleteNoteFromDatabase(noteId);
-
+        // Call a function to Websocket server for broadcasting the deletion
         await sendWebSocketDeleteMessage(noteId)
-        // Remove the clicked note from the DOM
+        // Remove the note from the DOM
         div.remove();
     });
-
-    // Set the background color of the 'div' element using the 'color' function
-    div.setAttribute('style', 'background:' + color() + '');
-
-    // Append the new 'div' element to the 'notes' container
-    notes.appendChild(div);
 }
-
+*/
+/*
 // Function to remove a note by its ID
 function divRemove(noteId) {
     console.log('Removing note with ID:', noteId);
@@ -232,8 +233,9 @@ function divRemove(noteId) {
         console.log('Note element not found for ID:', noteId);
     }
 }
-
-// Modify the sendWebSocketMessage function to only send WebSocket message
+*/
+/*
+// Function to send WebSocket creation message
 async function sendWebSocketMessage() {
     if (socket.readyState === WebSocket.OPEN) {
         // Send a WebSocket message to the server to broadcast the note creation
@@ -277,3 +279,4 @@ document.querySelector('.createBox').addEventListener('keydown', async (e) => {
         sendWebSocketMessage();
     }
 })
+*/

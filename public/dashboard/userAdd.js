@@ -1,6 +1,4 @@
-
-
-
+/* Add user to board delen */
 // Patchar boarden med addade användaren
 async function addUser(userEmail) {
     try {

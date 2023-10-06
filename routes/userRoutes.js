@@ -69,7 +69,8 @@ router.post('/', async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, 12)
 
     const generateJWTSecret = () => {
-        return require('crypto').randomBytes(48).toString('hex')
+        //return require('crypto').randomBytes(48).toString('hex')
+        return "acd6ccf64e4684d398f6ffa240bc68577110650ff3b901657c4f9d9e2c8450f4368d7fa29b4b43ce728afc47d54dce4b"
     }
     const secretKey = generateJWTSecret()
 
