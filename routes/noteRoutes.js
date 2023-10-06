@@ -33,7 +33,7 @@ router.post('/:id', async (req, res) => {
             data: {
                 text: req.body.text,
                 boards: {
-                    connect: { id: req.params.id }, 
+                    connect: { id: req.params.id },
                 }
             }
         });
@@ -77,14 +77,52 @@ router.patch('/:id', async (req, res) => {
 // Delete a note by ID
 router.delete('/:id', async (req, res) => {
     try {
-        const note = await prisma.note.delete({
-            where: {
-                id: req.params.id,
-            }
+        const noteIdToDelete = req.params.id;
+        // Find the note to get associated board ID
+        const note = await prisma.note.findUnique({
+            where: { id: noteIdToDelete },
+            include: { boards: true },
         });
+
+        if (!note) {
+            // Handle the case where the note doesn't exist
+            throw new Error('Note not found');
+        }
+
+        if (note.boards.length === 0) {
+            // Handle the case where the note is not associated with any board
+            throw new Error('Note is not associated with any board');
+        }
+
+        const boardId = note.boards[0].id;
+
+        const board = await prisma.board.findUnique({
+            where: {
+                id: boardId
+            }
+        })
+        
+        const boardNoteIdsArray = board.noteIds
+        const indexToRemove = boardNoteIdsArray.indexOf(noteIdToDelete)
+        if(indexToRemove !== -1) boardNoteIdsArray.splice(indexToRemove, 1)
+        console.log("New noteIds", boardNoteIdsArray)
+
+        // Remove the note ID from the `noteIds` array in the associated board
+        await prisma.board.update({
+            where: {
+                id: boardId,
+            },
+            data: {
+                notes: {
+                    deleteMany: [{ id: noteIdToDelete }],
+                },
+                noteIds: boardNoteIdsArray,
+            },
+        });
+
         res.send({
             msg: 'Success',
-            note: note
+            board: board
         });
     } catch (error) {
         console.error(error);

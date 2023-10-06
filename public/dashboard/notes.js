@@ -101,8 +101,6 @@ document.querySelector('.createBox').addEventListener('keydown', async (e) => {
         noteText = input.value;
         // Call postNote to save the note to the server/database
         await postNote();
-        // Create a new note locally on the client
-        divStyle(noteText, noteId);
         // Clear the input field
         input.value = "";
         // Hide the 'createBox' element by setting its style to "none"

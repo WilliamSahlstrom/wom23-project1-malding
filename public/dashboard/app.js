@@ -78,6 +78,8 @@ async function postNote() {
         if (response.ok) {
             const data = await response.json();
             console.log(data.note);
+            // Create a new note locally on the client
+            divStyle(data.note.text, data.note.id);
             // Now, call the function to send the WebSocket message
             sendWebSocketMessage(data.note);
         } else {
@@ -98,8 +100,7 @@ async function deleteNoteFromDatabase(noteId) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(`Note with ID ${data.note.id} deleted successfully.`);
-            noteId = data.note.id
+            console.log(`Note with ID ${noteId} deleted successfully from board with ID ${data.board.id}.`);
         } else {
             console.error(`Failed to delete note with ID ${noteId}.`);
         }
