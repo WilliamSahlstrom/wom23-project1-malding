@@ -1,10 +1,12 @@
-boards = boardIds;
-const userBoards = []
-boards.forEach(board => {
-    userBoards.push(board)
-})
+createArrayFromBoards(boardIds)
 
-addBoardsFromArray(userBoards);
+function createArrayFromBoards(boards) {
+    const userBoards = []
+    boards.forEach(board => {
+        userBoards.push(board)
+    })
+    addBoardsFromArray(userBoards);
+}
 
 function addBoardsFromArray(boardNames) {
     var dropdown = document.getElementById("boardDropdown");
@@ -26,14 +28,16 @@ function addBoardsFromArray(boardNames) {
         board.className = "board";
         document.body.appendChild(board);
     });
-
-    // Add data attribute to notes to associate them with a board
-    const notes = document.querySelectorAll('.note');
-    notes.forEach(function (note) {
-        const boardId = note.getAttribute('data-board-id');
-        note.dataset.boardId = boardId;
-    });
 }
+
+
+// Add data attribute to notes to associate them with a board
+const boardNotes = document.querySelectorAll('.note');
+boardNotes.forEach(function (note) {
+    const boardId = note.getAttribute('data-board-id');
+    note.dataset.boardId = boardId;
+});
+
 async function changeBoard() {
     const dropdown = document.getElementById("boardDropdown");
     const selectedBoardId = dropdown.selectedOptions[0].id;
