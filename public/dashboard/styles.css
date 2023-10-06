@@ -39,6 +39,7 @@ body {
     gap: 50px;
     justify-content: flex-start;
     align-items: flex-start;
+    margin-top: 50px;
 }
 .container .notes .note {
     position: relative;
@@ -114,6 +115,7 @@ body {
     background: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
+    z-index: 1000;
  }
  .popup {
     background: #fff;
@@ -192,4 +194,88 @@ body {
 
 #addUserBtn:hover {
     background-color: #27ae60;
+}
+
+#changePasswordBtn {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px; /* Adjust as needed */
+}
+
+#changePasswordBtn:hover {
+    background-color: #2980b9;
+}
+
+.popup-container-change-password {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-password {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.popup-password h2 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.popup-password form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.popup-password label {
+    font-weight: bold;
+}
+
+.popup-password input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.popup-password button[type="submit"] {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-password button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+.popup-password button#closePasswordChangePopup {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.popup-password button#closePasswordChangePopup:hover {
+    background-color: #c0392b;
 }

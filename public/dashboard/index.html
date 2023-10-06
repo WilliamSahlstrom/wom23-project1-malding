@@ -25,6 +25,28 @@
                 </div>
             </div>
         </div>
+        <button id="changePasswordBtn">Change Password</button>
+        <div id="passwordChangePopup" class="popup-container-change-password">
+            <div class="popup-password">
+                <h2>Change Password</h2>
+                <form id="passwordChangeForm">
+                    <label for="currentPassword">Current Password:</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                    <br>
+        
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                    <br>
+        
+                    <label for="confirmNewPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+                    <br>
+        
+                    <button type="submit">Change Password</button>
+                </form>
+                <button id="closePasswordChangePopup">Close</button>
+            </div>
+        </div>
         <div class="notes">
             <div id="create">
                 <i class="fa-solid fa-plus"></i>
@@ -50,5 +72,6 @@
     <script src="/public/dashboard/notes.js"></script>
     <script src="/public/dashboard/selectBoard.js"></script>
     <script src="/public/dashboard/userAdd.js"></script>
+    <script src="/public/dashboard/changePassword.js"></script>
 </body>
 </html>
