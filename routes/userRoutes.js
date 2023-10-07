@@ -117,10 +117,18 @@ router.patch('/:id', async (req, res) => {
             },
         });
 
+        const token = await jwt.sign({
+            sub: user.id,
+            email: user.email,
+            name: user.name,
+            boardIds: user.boardIds
+        }, user.secret)
+
         return res.send({
             msg: 'patch',
             id: req.params.id,
-            user: user
+            user: user,
+            token: token
         });
     } catch (error) {
         console.error('Error updating user password:', error);
