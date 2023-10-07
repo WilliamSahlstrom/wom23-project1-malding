@@ -32,6 +32,7 @@ router.post('/:id', async (req, res) => {
         const note = await prisma.note.create({
             data: {
                 text: req.body.text,
+                color: req.body.color,
                 boards: {
                     connect: { id: req.params.id },
                 }

@@ -12,7 +12,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "text": "niklas maldingtext"
+    "text": "niklas maldingtext",
+    "color": "#c2ff3d"
 }
 
 ### 
@@ -21,7 +22,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "text": "williams patched maldingtext v2"
+    "text": "williams patched maldingtext v2",
 }
 
 ###

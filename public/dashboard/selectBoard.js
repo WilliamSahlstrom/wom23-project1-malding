@@ -60,7 +60,7 @@ async function changeBoard() {
             const data = await response.json();
             console.log(data.notes);
             data.notes.forEach(note => {
-                divStyle(note.text, note.id);
+                divStyle(note);
             });
         } else {
             console.error("Failed to fetch notes for the selected board.");

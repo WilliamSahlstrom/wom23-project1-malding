@@ -36,6 +36,7 @@ model Board {
 model Note {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   text      String?
+  color     String
   boards    Board[]   @relation(fields: [boardIds], references: [id])
   boardIds  String[]  @db.ObjectId
   createdAt DateTime  @default(now())

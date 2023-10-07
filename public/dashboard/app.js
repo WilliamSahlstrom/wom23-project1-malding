@@ -32,6 +32,7 @@ console.log('Constructed URL with boardIds:', WS_URL)
 
 let noteText;
 let noteId;
+let noteColor;
 // Hämtar notes för den boarden som sparats i localstorage 
 // och när man bytit board via dropdown
 async function test() {
@@ -48,12 +49,7 @@ async function test() {
             const data = await response.json();
             console.log(data.notes);
             data.notes.forEach(note => {
-                for (let i = 0; i < data.notes.length; i++) {
-                    if (note.id == data.notes[i].id) {
-                        console.log(data.notes[i].text);
-                        divStyle(data.notes[i].text, data.notes[i].id);
-                    }
-                }
+                divStyle(note);
             })
         } else {
             console.error("not good :(");
@@ -72,14 +68,15 @@ async function postNote() {
                 "Authorization": `Bearer ${WS_TOKEN}`
             },
             body: JSON.stringify({
-                text: noteText
+                text: noteText,
+                color: noteColor,
             })
         });
         if (response.ok) {
             const data = await response.json();
             console.log(data.note);
             // Create a new note locally on the client
-            divStyle(data.note.text, data.note.id);
+            divStyle(data.note);
             // Now, call the function to send the WebSocket message
             sendWebSocketMessage(data.note);
         } else {
@@ -128,7 +125,7 @@ socket.onmessage = function (event) {
     if (data.type === 'createNote') {
         // Call divStyle to create note on all clients who have currently selected the board
         // that was updated when a "createNote" message is received
-        if(localStorage.getItem('currentBoard') === data.board)  divStyle(data.text, data.id);
+        if (localStorage.getItem('currentBoard') === data.board) divStyle(data);
     }
 
     if (data.type === 'selectBoard') {

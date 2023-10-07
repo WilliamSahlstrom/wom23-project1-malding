@@ -29,14 +29,14 @@ function color() {
 }
 
 // Function to create and style a new note
-function divStyle(text, noteId) {
+function divStyle(note) {
     let div = document.createElement('div');
     div.className = 'note';
-    div.setAttribute('data-note-id', noteId);
+    div.setAttribute('data-note-id', note.id);
     // Set the inner HTML with a div for the note and h3 for its text
-    div.innerHTML = '<div class="details">' + '<h3>' + text + '<h3>' + '</div>';
+    div.innerHTML = '<div class="details">' + '<h3>' + note.text + '<h3>' + '</div>';
     // Set the background color of the note
-    div.setAttribute('style', 'background:' + color() + '');
+    div.setAttribute('style', 'background:' + note.color + '');
     // Append the new note to the 'notes' container
     notes.appendChild(div);
 
@@ -73,6 +73,7 @@ async function sendWebSocketMessage(note) {
         socket.send(JSON.stringify({
             type: 'createNote',
             text: note.text,
+            color: note.color,
             id: note.id,
             board: note.boardIds[0]
         }));
@@ -97,8 +98,8 @@ async function sendWebSocketDeleteMessage(noteId) {
 document.querySelector('.createBox').addEventListener('keydown', async (e) => {
     // Check if the key code of the pressed key is '13' (Enter key)
     if (e && e.keyCode == 13) {
-        // Call the 'divStyle' function with the input value
         noteText = input.value;
+        noteColor = color();
         // Call postNote to save the note to the server/database
         await postNote();
         // Clear the input field
