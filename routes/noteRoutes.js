@@ -101,10 +101,10 @@ router.delete('/:id', async (req, res) => {
                 id: boardId
             }
         })
-        
+
         const boardNoteIdsArray = board.noteIds
         const indexToRemove = boardNoteIdsArray.indexOf(noteIdToDelete)
-        if(indexToRemove !== -1) boardNoteIdsArray.splice(indexToRemove, 1)
+        if (indexToRemove !== -1) boardNoteIdsArray.splice(indexToRemove, 1)
         console.log("New noteIds", boardNoteIdsArray)
 
         // Remove the note ID from the `noteIds` array in the associated board
@@ -120,9 +120,16 @@ router.delete('/:id', async (req, res) => {
             },
         });
 
+        // Delete the note
+        await prisma.note.delete({
+            where: {
+                id: noteIdToDelete
+            },
+        });
+
         res.send({
             msg: 'Success',
-            board: board
+            board: note
         });
     } catch (error) {
         console.error(error);
