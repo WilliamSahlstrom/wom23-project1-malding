@@ -27,6 +27,7 @@ router.get('/:id', async (req, res) => {
     console.log("users GET ONE")
     res.send({ msg: 'users', user: user })
 })
+
 router.post('/login',async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
@@ -91,37 +92,44 @@ router.post('/', async (req, res) => {
     res.send({ msg: 'user created', id: user.id })
 })
 
-
+router.use(verifyToken)
 router.patch('/:id', async (req, res) => {
+    try {
+        if (req.params.id !== req.authUser.sub) {
+            return res.status(403).send({
+                msg: 'ERROR',
+                error: 'Cannot patch other users'
+            });
+        }
 
-    if (req.params.id != req.authUser.sub) {
-        res.status(403).send({
-            msg: 'ERROR',
-            error: 'Cannot patch other users'
-        })
-    }
+        let hash = null;  // Change const to let since you want to reassign this variable
+        if (req.body.password) {
+            hash = await bcrypt.hash(req.body.password, 12);
+        }
 
-    const hash = null
-    if (req.body.password) {
-        hash = await bcrypt.hash(req.body.password, 12)
-    }
+        const user = await prisma.user.update({
+            where: {
+                id: req.params.id,
+            },
+            data: {
+                password: hash,
+                updatedAt: new Date()
+            },
+        });
 
-    const user = await prisma.users.update({
-        where: {
+        return res.send({
+            msg: 'patch',
             id: req.params.id,
-        },
-        data: {
-            password: hash,
-            name: req.params.name,
-            updatedAt: new Date()
-        },
-    })
-    res.send({
-        msg: 'patch',
-        id: req.params.id,
-        user: user
-    })
-})
+            user: user
+        });
+    } catch (error) {
+        console.error('Error updating user password:', error);
+        return res.status(500).send({
+            msg: 'ERROR',
+            error: 'Internal Server Error'
+        });
+    }
+});
 
 router.delete('/:id', async (req, res) => {
 

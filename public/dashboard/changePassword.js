@@ -38,11 +38,11 @@ passwordChangeForm.addEventListener('submit', async (event) => {
     }
     try {
         // Send a PATCH request to update the password
-        const response = await fetch(`http://localhost:3030/users/${userId}`, {
-            method: 'PATCH',
+        const response = await fetch(`http://localhost:3030/users/${payload.sub}`, {
+            method: "PATCH",
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${WS_TOKEN}`,
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${WS_TOKEN}`
             },
             body: JSON.stringify({
                 password: confirmNewPassword
