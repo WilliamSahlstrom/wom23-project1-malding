@@ -47,6 +47,19 @@
                 <button id="closePasswordChangePopup">Close</button>
             </div>
         </div>
+        <button id="createNewBoard">Create New Board</button>
+        <div id="createNewBoardPopup" class="popup-container-create-board">
+            <div class="popup-create-board">
+                <h2>Create New Board</h2>
+                <form id="createNewBoardForm">
+                    <label for="newBoardName">Board Name:</label>
+                    <input type="text" id="newBoardName" name="newBoardName" required>
+                    <br>
+                    <button type="submit">Create Board</button>
+                </form>
+                <button id="closeCreateNewBoardPopup">Close</button>
+            </div>
+        </div>
         <div class="notes">
             <div id="create">
                 <i class="fa-solid fa-plus"></i>
@@ -70,6 +83,7 @@
     </div>
     <script src="/public/dashboard/app.js"></script>
     <script src="/public/dashboard/notes.js"></script>
+    <script src="/public/dashboard/createBoard.js"></script>
     <script src="/public/dashboard/selectBoard.js"></script>
     <script src="/public/dashboard/userAdd.js"></script>
     <script src="/public/dashboard/changePassword.js"></script>
