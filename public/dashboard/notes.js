@@ -10,6 +10,14 @@ let input = document.getElementById('userInput');
 
 // Initialize a variable to keep track of the color index
 let iColor = 0;
+const randomColor = [
+    "rgb(194, 255, 61)",
+    "rgb(255, 61, 232)",
+    "rgb(61, 194, 255)",
+    "rgb(4, 224, 34)",
+    "rgb(188, 131, 230)",
+    "rgb(235, 179, 40)"
+];
 
 // Add a 'click' event listener to the element with the ID 'create'
 document.getElementById("create").addEventListener("click", function () {
@@ -18,14 +26,14 @@ document.getElementById("create").addEventListener("click", function () {
 });
 
 // Function to generate a random color
-function color() {
-    let randomColor = ["#c2ff3d", "#ff3de8", "3dc2ff", "#04e022", "#bc83e6", "#ebb328"];
+function color(color) {
     // Check if the index 'i' exceeds the color array length, and reset it if necessary
-    if (iColor > randomColor.length - 1) {
-        iColor = 0;
+    if (color > randomColor.length - 1) {
+        color = 0;
     }
-    // Return the color at the current index and increment 'i'
-    return randomColor[iColor++];
+    iColor++
+    // Return the color
+    return randomColor[color];
 }
 
 // Function to create and style a new note
@@ -33,36 +41,124 @@ function divStyle(note) {
     let div = document.createElement('div');
     div.className = 'note';
     div.setAttribute('data-note-id', note.id);
-    // Set the inner HTML with a div for the note and h3 for its text
-    div.innerHTML = '<div class="details">' + '<h3>' + note.text + '<h3>' + '</div>';
+    // Track whether the note is being edited
+    div.setAttribute('data-editing', 'false');
+    // Set the inner HTML with a div for the note, h3 for its text, and a button for color cycling
+    div.innerHTML = `
+        <div class="details">
+            <button class="colorButton"></button>
+            <h3 contenteditable="false">${note.text}</h3>
+        </div>
+    `;
     // Set the background color of the note
-    div.setAttribute('style', 'background:' + note.color + '');
+    div.setAttribute('style', `background-color: ${note.color}`)
     // Append the new note to the 'notes' container
     notes.appendChild(div);
 
     // Add a 'dblclick' event listener to the new 'div' element for removing the note
-    div.addEventListener('dblclick', async function () {
-        // Get the note's ID from the data attribute
-        const noteId = div.getAttribute('data-note-id');
-        console.log(noteId);
-        // Call a function to delete the note from the database
-        await deleteNoteFromDatabase(noteId);
-        // Call a function to Websocket server for broadcasting the deletion
-        await sendWebSocketDeleteMessage(noteId)
-        // Remove the note from the DOM
-        div.remove();
+    div.addEventListener('dblclick', async function (event) {
+        if (div.getAttribute('data-editing') === 'false') {
+            // Check if the double-click target is not the color change button
+            if (!event.target.classList.contains('colorButton')) {
+                // Get the note's ID from the data attribute
+                const noteId = div.getAttribute('data-note-id');
+                console.log(noteId);
+                // Call a function to delete the note from the database
+                await deleteNoteFromDatabase(noteId);
+                // Call a function to Websocket server for broadcasting the deletion
+                await sendWebSocketDeleteMessage(noteId);
+                // Remove the note from the DOM
+                div.remove();
+            }
+        }
     });
+
+    // Add a 'click' event listener to the new 'div' element for editing the note
+    div.addEventListener('click', function (event) {
+        // Check if the click target is the h3 element
+        if (event.target.tagName === 'H3') {
+            if (div.getAttribute('data-editing') === 'false') {
+                div.setAttribute('data-editing', 'true');
+                const h3 = div.querySelector('h3');
+                h3.contentEditable = 'true';
+                h3.focus();
+
+                // Add a 'keydown' event listener to the h3 element for finishing editing
+                h3.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        h3.blur();
+                    }
+                });
+
+                // Add a 'blur' event listener to the h3 element for finishing editing
+                h3.addEventListener('blur', async function () {
+                    const editedText = h3.innerText.trim();
+                    const editedNoteId = div.getAttribute('data-note-id');
+                    div.setAttribute('data-editing', 'false');
+                    h3.contentEditable = 'false';
+
+                    // Call a function to patch the edited note in the database
+                    await patchNoteInDatabase(editedNoteId, editedText);
+                });
+            }
+        }
+    });
+
+    // Add a 'click' event listener to the color button for changing the note color
+    const colorButton = div.querySelector('.colorButton')
+    colorButton.addEventListener('dblclick', function (event) {
+        // Prevent the double-click event from bubbling up to the parent div
+        event.stopPropagation();
+    });
+    colorButton.addEventListener('click', async function (event) {
+        const currentColorIndex = randomColor.indexOf(div.style.backgroundColor);
+        const nextColorIndex = (currentColorIndex + 1) % randomColor.length;
+        const newColor = randomColor[nextColorIndex];
+
+        // Set the background color of the note
+        div.setAttribute('style', `background-color: ${newColor}`);
+
+        // Set the new color for the color button
+        colorButton.style.backgroundColor = randomColor[((nextColorIndex + 1) % randomColor.length)];
+
+        // Call a function to patch the color of the note in the database
+        await patchNoteColorInDatabase(note.id, newColor);
+    });
+
+    const currentColorIndex = randomColor.indexOf(note.color);
+    const nextColorIndex = (currentColorIndex + 1) % randomColor.length;
+    colorButton.style.backgroundColor = randomColor[nextColorIndex];
+    colorButton.style.width = '20px';
+    colorButton.style.height = '20px';
+    colorButton.style.margin = '5px';
+    colorButton.style.border = '1px solid #000';
+    colorButton.style.borderRadius = '3px';
+    colorButton.style.float = 'right';
 }
 
 // Function to remove a note by its ID
 function divRemove(noteId) {
-    console.log('Removing note with ID:', noteId);
-    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+    console.log('Removing note with ID:', noteId)
+    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`)
     if (noteElement) {
-        console.log('Found element to remove:', noteElement);
-        noteElement.remove();
+        console.log('Found element to remove:', noteElement)
+        noteElement.remove()
     } else {
-        console.log('Note element not found for ID:', noteId);
+        console.log('Note element not found for ID:', noteId)
+    }
+}
+
+// Function to edit a note
+function divEdit(note) {
+    console.log('Editing note with ID:', note.id)
+    const noteElement = document.querySelector(`[data-note-id="${note.id}"]`)
+    if (noteElement) {
+        console.log('Found element to edit:', noteElement)
+        noteElement.querySelector('h3').innerHTML = note.text
+        noteElement.setAttribute('style', `background-color: ${note.color}`);
+    } else {
+        console.log('Note element not found for ID:', note.id)
     }
 }
 
@@ -94,17 +190,33 @@ async function sendWebSocketDeleteMessage(noteId) {
     }
 }
 
+// Function to send WebSocket edit message
+async function sendWebSocketEditMessage(note) {
+    if (socket.readyState === WebSocket.OPEN) {
+        // Send a WebSocket message to the server to broadcast the note edit
+        socket.send(JSON.stringify({
+            type: 'editNote',
+            text: note.text,
+            color: note.color,
+            id: note.id,
+            board: note.boardIds[0]
+        }));
+    } else {
+        console.error('WebSocket is not open yet. Wait for the connection to establish.');
+    }
+}
+
 // Function to handle the 'keydown' event
 document.querySelector('.createBox').addEventListener('keydown', async (e) => {
     // Check if the key code of the pressed key is '13' (Enter key)
     if (e && e.keyCode == 13) {
-        noteText = input.value;
-        noteColor = color();
+        noteText = input.value
+        noteColor = color(iColor)
         // Call postNote to save the note to the server/database
         await postNote();
         // Clear the input field
-        input.value = "";
+        input.value = ""
         // Hide the 'createBox' element by setting its style to "none"
-        createBox.style.display = "none";
+        createBox.style.display = "none"
     }
 })

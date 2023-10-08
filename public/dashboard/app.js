@@ -105,6 +105,59 @@ async function deleteNoteFromDatabase(noteId) {
         console.error(error);
     }
 }
+async function patchNoteInDatabase(noteId, editedText) {
+    try {
+        const response = await fetch(`http://localhost:3030/notes/${noteId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${WS_TOKEN}`
+            },
+            body: JSON.stringify({
+                text: editedText,
+            })
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(`Note with ID ${data.note.id} edited successfully on board with ID ${data.note.boardIds[0]}.`);
+            // Call a function to Websocket server for broadcasting the edit
+            await sendWebSocketEditMessage(data.note);
+        } else {
+            console.error(`Failed to edit note with ID ${noteId}.`);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Function to patch the color of the note in the database
+async function patchNoteColorInDatabase(noteId, newColor) {
+    try {
+        const response = await fetch(`http://localhost:3030/notes/${noteId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${WS_TOKEN}`
+            },
+            body: JSON.stringify({
+                color: newColor,
+            })
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(`Note with ID ${noteId} color patched successfully on board with ID ${data.note.boardIds[0]}.`);
+            const noteDiv = document.querySelector(`[data-note-id="${noteId}"]`)
+            // Set the background color using setAttribute
+            noteDiv.setAttribute('style', `background-color: ${newColor}`)
+            // Call a function to Websocket server for broadcasting the color change
+            await sendWebSocketEditMessage(data.note)
+        } else {
+            console.error(`Failed to patch note color with ID ${noteId}.`);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 /* Websocket delen */
 // Create a WebSocket connection
@@ -125,16 +178,20 @@ socket.onmessage = function (event) {
     if (data.type === 'createNote') {
         // Call divStyle to create note on all clients who have currently selected the board
         // that was updated when a "createNote" message is received
-        if (localStorage.getItem('currentBoard') === data.board) divStyle(data);
+        if (localStorage.getItem('currentBoard') === data.board) divStyle(data)
     }
 
-    if (data.type === 'selectBoard') {
-        test();
+    if (data.type === 'editNote') {
+        if (localStorage.getItem('currentBoard') === data.board) divEdit(data)
     }
 
     if (data.type === 'deleteNote') {
         // Remove the note from the DOM on the client if it exists
         divRemove(data.id);
+    }
+
+    if (data.type === 'selectBoard') {
+        test();
     }
 
     if (data.type === 'addUser') {

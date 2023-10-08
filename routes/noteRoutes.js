@@ -60,6 +60,7 @@ router.patch('/:id', async (req, res) => {
             },
             data: {
                 text: req.body.text,
+                color: req.body.color
             }
         });
         res.send({
