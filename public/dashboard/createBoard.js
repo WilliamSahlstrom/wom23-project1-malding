@@ -37,7 +37,7 @@ createNewBoardForm.addEventListener('submit', async (event) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${WS_TOKEN}` // Include your authorization token
+                'Authorization': `Bearer ${WS_TOKEN}`
             },
             body: JSON.stringify({
                 name: newBoardName
@@ -47,9 +47,21 @@ createNewBoardForm.addEventListener('submit', async (event) => {
         if (response.ok) {
             // Board created successfully
             alert('Board created successfully!');
+            const data = await response.json();
+            localStorage.setItem('access_token', data.token)
+            WS_TOKEN = data.token
+            parsePayload(WS_TOKEN)
+            // Re-fetch boards and update the dropdown
+            await createArrayFromBoards(boardIds);
+            // Manually add the new board to the dropdown
+            const dropdown = document.getElementById('boardDropdown');
+            const newOption = document.createElement('option');
+            newOption.value = newBoardName;
+            newOption.text = newBoardName;
+            newOption.id = data.board.id;
+            dropdown.appendChild(newOption);
             // Close the "Create New Board" popup
             closeCreateNewBoardPopup();
-            // Optionally, you can perform additional actions like updating the board list.
         } else {
             // Handle errors if the board creation request fails
             alert('Board creation failed. Please try again.');

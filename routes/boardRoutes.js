@@ -70,6 +70,9 @@ router.get('/:id', async (req, res) => {
 // Create a new board
 router.post('/', async (req, res) => {
     try {
+        const user = await prisma.user.findUnique({
+            where: { id: (req.authUser.sub) }
+        })
         const board = await prisma.board.create({
             data: {
                 name: req.body.name,
@@ -78,9 +81,17 @@ router.post('/', async (req, res) => {
                 }
             }
         });
+        const token = await jwt.sign({
+            sub: user.id,
+            email: user.email,
+            name: user.name,
+            boardIds: user.boardIds
+        }, user.secret)
         res.send({
             msg: 'Success',
-            board: board
+            board: board,
+            token: token,
+            authorizedUserId: req.authUser.sub
         });
     } catch (error) {
         console.error(error);
