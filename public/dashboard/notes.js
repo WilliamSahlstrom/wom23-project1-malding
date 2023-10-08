@@ -43,6 +43,11 @@ function divStyle(note) {
     div.setAttribute('data-note-id', note.id);
     // Track whether the note is being edited
     div.setAttribute('data-editing', 'false');
+    div.setAttribute('draggable', 'true');
+    // Add a 'dragstart' event listener to initiate the drag operation
+    div.addEventListener('dragstart', function (event) {
+        event.dataTransfer.setData('text/plain', note.id);
+    });
     // Set the inner HTML with a div for the note, h3 for its text, and a button for color cycling
     div.innerHTML = `
         <div class="details">
@@ -71,6 +76,16 @@ function divStyle(note) {
                 div.remove();
             }
         }
+    });
+
+    // Add a 'dragend' event listener to send the note's new position to the server
+    div.addEventListener('dragend', async function (event) {
+        const noteId = div.getAttribute('data-note-id');
+        const position = {
+            left: div.style.left,
+            top: div.style.top
+        };
+        await sendWebSocketPositionMessage(noteId, position);
     });
 
     // Add a 'click' event listener to the new 'div' element for editing the note
@@ -220,3 +235,38 @@ document.querySelector('.createBox').addEventListener('keydown', async (e) => {
         createBox.style.display = "none"
     }
 })
+
+// Add a 'dragover' event listener to the 'notes' container
+document.addEventListener('dragover', function (event) {
+    event.preventDefault(); // Prevent the default behavior to allow dropping
+});
+
+// Add a 'drop' event listener to the document to handle the drop operation
+document.addEventListener('drop', function (event) {
+    event.preventDefault();
+    const noteId = event.dataTransfer.getData('text/plain');
+    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+
+    if (noteElement) {
+        // Set the new position of the note based on the mouse cursor position
+        noteElement.style.position = 'absolute';
+        noteElement.style.left = (event.clientX - noteElement.offsetWidth / 2) + 'px';
+        noteElement.style.top = (event.clientY - noteElement.offsetHeight / 2) + 'px';
+    }
+});
+
+// Function to send WebSocket position message
+async function sendWebSocketPositionMessage(noteId, position) {
+    if (socket.readyState === WebSocket.OPEN) {
+        position.left = position.left;
+        position.top = position.top;
+        // Send a WebSocket message to the server to broadcast the note's new position
+        socket.send(JSON.stringify({
+            type: 'moveNote',
+            id: noteId,
+            position: position
+        }));
+    } else {
+        console.error('WebSocket is not open yet. Wait for the connection to establish.');
+    }
+}

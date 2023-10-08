@@ -41,6 +41,13 @@ body {
     align-items: flex-start;
     margin-top: 170px;
 }
+.notes .note {
+    position: absolute;
+    cursor: grab;
+}
+.notes .note:active {
+    cursor: grabbing;
+}
 .container .notes .note {
     position: relative;
     width: var(--size);
