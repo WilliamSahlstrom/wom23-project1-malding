@@ -12,7 +12,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "text": "niklas maldingtext",
+    "text": "testar en grej",
     "color": "#c2ff3d"
 }
 
