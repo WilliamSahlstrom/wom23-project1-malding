@@ -78,14 +78,42 @@ function divStyle(note) {
         }
     });
 
-    // Add a 'dragend' event listener to send the note's new position to the server
+    // Add a 'drag' event listener to continuously track and update the note's position during drag
+    div.addEventListener('drag', function (event) {
+        const noteId = div.getAttribute('data-note-id');
+
+        // Calculate the position to center the note around the mouse cursor
+        const newPosition = {
+            left: (event.clientX - div.offsetWidth / 2) + 'px',
+            top: (event.clientY - div.offsetHeight / 2) + 'px'
+        };
+
+        // Set the new position of the note
+        div.style.position = 'absolute';
+        div.style.left = newPosition.left;
+        div.style.top = newPosition.top;
+
+        // Call a function to send the note's position to the server continuously
+        sendWebSocketPositionMessage(noteId, newPosition);
+    });
+
+    // Add a 'dragend' event listener to send the final note's position to the server
     div.addEventListener('dragend', async function (event) {
         const noteId = div.getAttribute('data-note-id');
-        const position = {
-            left: div.style.left,
-            top: div.style.top
+
+        // Calculate the final position based on the mouse cursor position
+        const finalPosition = {
+            left: (event.clientX - div.offsetWidth / 2) + 'px',
+            top: (event.clientY - div.offsetHeight / 2) + 'px'
         };
-        await sendWebSocketPositionMessage(noteId, position);
+
+        // Set the final position of the note
+        div.style.position = 'absolute';
+        div.style.left = finalPosition.left;
+        div.style.top = finalPosition.top;
+
+        // Call a function to send the final note's position to the server
+        await sendWebSocketPositionMessage(noteId, finalPosition);
     });
 
     // Add a 'click' event listener to the new 'div' element for editing the note
@@ -255,12 +283,10 @@ document.addEventListener('drop', function (event) {
     }
 });
 
-// Function to send WebSocket position message
+// Update the WebSocket position message sending function to accept continuous updates
 async function sendWebSocketPositionMessage(noteId, position) {
     if (socket.readyState === WebSocket.OPEN) {
-        position.left = position.left;
-        position.top = position.top;
-        // Send a WebSocket message to the server to broadcast the note's new position
+        // Send a WebSocket message to the server to broadcast the note's position
         socket.send(JSON.stringify({
             type: 'moveNote',
             id: noteId,
