@@ -51,8 +51,8 @@ passwordChangeForm.addEventListener('submit', async (event) => {
 
         if (response.ok) {
             const data = await response.json();
-            localStorage.setItem("access_token", data.token)
-            WS_TOKEN = localStorage.getItem("access_token")
+            localStorage.setItem("access_token", data.token);
+            WS_TOKEN = localStorage.getItem("access_token");
             // Password changed successfully
             alert('Password changed successfully!');
             // Close the password change pop-up

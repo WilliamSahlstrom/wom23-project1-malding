@@ -31,7 +31,7 @@ function color(color) {
     if (color > randomColor.length - 1) {
         color = 0;
     }
-    iColor++
+    iColor++;
     // Return the color
     return randomColor[color];
 }
@@ -60,7 +60,7 @@ function divStyle(note) {
         </div>
     `;
     // Set the background color of the note
-    div.setAttribute('style', `background-color: ${note.color}`)
+    div.setAttribute('style', `background-color: ${note.color}`);
     // Append the new note to the 'notes' container
     notes.appendChild(div);
 
@@ -185,11 +185,11 @@ function divStyle(note) {
 
 // Function to remove a note by its ID
 function divRemove(noteId) {
-    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`)
+    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
     if (noteElement) {
-        noteElement.remove()
+        noteElement.remove();
     } else {
-        console.log('Note element not found for ID:', noteId)
+        console.log('Note element not found for ID:', noteId);
     }
 }
 
@@ -197,10 +197,10 @@ function divRemove(noteId) {
 function divEdit(note) {
     const noteElement = document.querySelector(`[data-note-id="${note.id}"]`)
     if (noteElement) {
-        noteElement.querySelector('h3').innerHTML = note.text
+        noteElement.querySelector('h3').innerHTML = note.text;
         noteElement.setAttribute('style', `background-color: ${note.color}`);
     } else {
-        console.log('Note element not found for ID:', note.id)
+        console.log('Note element not found for ID:', note.id);
     }
 }
 
@@ -252,16 +252,16 @@ async function sendWebSocketEditMessage(note) {
 document.querySelector('.createBox').addEventListener('keydown', async (e) => {
     // Check if the key code of the pressed key is '13' (Enter key)
     if (e && e.keyCode == 13) {
-        noteText = input.value
-        noteColor = color(iColor)
+        noteText = input.value;
+        noteColor = color(iColor);
         // Call postNote to save the note to the server/database
         await postNote();
         // Clear the input field
-        input.value = ""
+        input.value = "";
         // Hide the 'createBox' element by setting its style to "none"
-        createBox.style.display = "none"
+        createBox.style.display = "none";
     }
-})
+});
 
 // Add a 'dragover' event listener to the 'notes' container
 document.addEventListener('dragover', function (event) {

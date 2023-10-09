@@ -1,26 +1,26 @@
-const express = require('express')
-const router = express.Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const { PrismaClient } = require('@prisma/client')
-const { verifyToken } = require('../middleware/auth')
-const prisma = new PrismaClient()
-require('dotenv').config()
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { PrismaClient } = require('@prisma/client');
+const { verifyToken } = require('../middleware/auth');
+const prisma = new PrismaClient();
+require('dotenv').config();
 
 router.post('/login',async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { email: req.body.email }
-        })
+        });
 
         if (user == null) {
-            return res.status(404).send({ msg: 'ERROR', error: 'User not found' })
+            return res.status(404).send({ msg: 'ERROR', error: 'User not found' });
         }
 
-        const match = await bcrypt.compare(req.body.password, user.password)
+        const match = await bcrypt.compare(req.body.password, user.password);
 
         if (!match) {
-            return res.status(401).send({ msg: 'ERROR', error: 'Wrong password' })
+            return res.status(401).send({ msg: 'ERROR', error: 'Wrong password' });
         }
 
         const token = await jwt.sign({
@@ -28,14 +28,14 @@ router.post('/login',async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, process.env.SECRET)
+        }, process.env.SECRET);
 
         res.send({
             token: token,
             msg: "Login successful",
             userId: user.id,
             userEmail: user.email
-        })
+        });
 
     } catch (error) {
         // Handle other errors, if any
@@ -46,7 +46,7 @@ router.post('/login',async (req, res) => {
 
 router.post('/', async (req, res) => {
 
-    const hash = await bcrypt.hash(req.body.password, 12)
+    const hash = await bcrypt.hash(req.body.password, 12);
 
     const user = await prisma.user.create({
         data: {
@@ -62,10 +62,10 @@ router.post('/', async (req, res) => {
         },
     })
     console.log("user created:", user)
-    res.send({ msg: 'user created', id: user.id })
+    res.send({ msg: 'user created', id: user.id });
 })
 
-router.use(verifyToken)
+router.use(verifyToken);
 router.patch('/:id', async (req, res) => {
     try {
         if (req.params.id !== req.authUser.sub) {
@@ -95,7 +95,7 @@ router.patch('/:id', async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, process.env.SECRET)
+        }, process.env.SECRET);
 
         return res.send({
             msg: 'patch',

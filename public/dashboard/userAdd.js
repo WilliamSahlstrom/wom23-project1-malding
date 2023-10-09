@@ -15,7 +15,7 @@ async function addUser(userEmail) {
         });
         if (response.ok) {
             const data = await response.json();
-            sendWebSocketAddUserMessage(data)
+            sendWebSocketAddUserMessage(data);
         } else {
             console.error("not good :(");
         }
@@ -55,10 +55,10 @@ async function updateAddedUsersClient(userEmail) {
             parsePayload(WS_TOKEN)
             createArrayFromBoards(boardIds)
         } else {
-            console.error("not good :(")
+            console.error("user not found");
         }
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
 }
 

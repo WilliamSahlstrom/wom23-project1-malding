@@ -1,30 +1,30 @@
 // hårdkodat för test, sätt in i WS_TOKEN i .env
-let WS_TOKEN = localStorage.getItem('access_token')
-let payload
-let boardIds
+let WS_TOKEN = localStorage.getItem('access_token');
+let payload;
+let boardIds;
 
-parsePayload(WS_TOKEN)
+parsePayload(WS_TOKEN);
 // Checkar om JWT finns i localstorage och hämtar payloaden
 async function parsePayload(token) {
     if (token) {
         try {
-            const tokenParts = token.split('.')
-            payload = JSON.parse(atob(tokenParts[1]))
-            boardIds = payload.boardIds
-            localStorage.setItem('currentBoard', boardIds[0])
+            const tokenParts = token.split('.');
+            payload = JSON.parse(atob(tokenParts[1]));
+            boardIds = payload.boardIds;
+            localStorage.setItem('currentBoard', boardIds[0]);
         } catch (e) {
-            console.error(e)
+            console.error(e);
         }
     } else {
-        console.error('JWT token not found in localStorage.')
+        console.error('JWT token not found in localStorage.');
     }
 }
 
 
 const boardIdsString = boardIds.join('&board=')
 // Construct the URL with boardIds as URL parameters
-const baseUrl = `wss://malding-ws-api.azurewebsites.net?access_token=${WS_TOKEN}`
-const WS_URL = `ws://localhost:5500?access_token=${WS_TOKEN}&board=${boardIdsString}`
+const baseUrl = `wss://malding-ws-api.azurewebsites.net?access_token=${WS_TOKEN}`;
+const WS_URL = `ws://localhost:5500?access_token=${WS_TOKEN}&board=${boardIdsString}`;
 
 
 let noteText;
@@ -166,16 +166,16 @@ socket.onopen = function (event) {
 socket.onmessage = function (event) {
     console.log('Received message:', event.data);
     const data = JSON.parse(event.data);
-    console.log(data)
+    console.log(data);
 
     if (data.type === 'createNote') {
         // Call divStyle to create note on all clients who have currently selected the board
         // that was updated when a "createNote" message is received
-        if (localStorage.getItem('currentBoard') === data.board) divStyle(data)
+        if (localStorage.getItem('currentBoard') === data.board) divStyle(data);
     }
 
     if (data.type === 'editNote') {
-        if (localStorage.getItem('currentBoard') === data.board) divEdit(data)
+        if (localStorage.getItem('currentBoard') === data.board) divEdit(data);
     }
 
     if (data.type === 'deleteNote') {
@@ -184,7 +184,7 @@ socket.onmessage = function (event) {
     }
 
     if (data.type === 'moveNote') {
-        const noteElement = document.querySelector(`[data-note-id="${data.id}"]`)
+        const noteElement = document.querySelector(`[data-note-id="${data.id}"]`);
         if (noteElement) {
             // Set the new position of the note based on the mouse cursor position
             noteElement.style.position = 'absolute';
@@ -199,8 +199,8 @@ socket.onmessage = function (event) {
 
     if (data.type === 'addUser') {
         if (data.email === payload.email) {
-            updateAddedUsersClient(data.email)
-            sendWebSocketUpdateMyClient(data)
+            updateAddedUsersClient(data.email);
+            sendWebSocketUpdateMyClient(data);
         }
     }
 

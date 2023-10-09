@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 // GET all boards
 router.get('/', async (req, res) => {
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, process.env.SECRET)
+        }, process.env.SECRET);
 
         res.send({
             msg: 'Success',
@@ -86,7 +86,7 @@ router.post('/', async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, process.env.SECRET)
+        }, process.env.SECRET);
         res.send({
             msg: 'Success',
             board: board,

@@ -47,9 +47,9 @@ createNewBoardForm.addEventListener('submit', async (event) => {
             // Board created successfully
             alert('Board created successfully!');
             const data = await response.json();
-            localStorage.setItem('access_token', data.token)
-            WS_TOKEN = data.token
-            parsePayload(WS_TOKEN)
+            localStorage.setItem('access_token', data.token);
+            WS_TOKEN = data.token;
+            parsePayload(WS_TOKEN);
             // Re-fetch boards and update the dropdown
             await createArrayFromBoards(boardIds);
             // Manually add the new board to the dropdown
@@ -61,7 +61,7 @@ createNewBoardForm.addEventListener('submit', async (event) => {
             dropdown.appendChild(newOption);
             // Close the "Create New Board" popup
             closeCreateNewBoardPopup();
-            sendWebSocketUpdateMyClient(data)
+            sendWebSocketUpdateMyClient(data);
         } else {
             // Handle errors if the board creation request fails
             alert('Board creation failed. Please try again.');
