@@ -1,10 +1,9 @@
-// hårdkodat för test, sätt in i WS_TOKEN i .env
 let WS_TOKEN = localStorage.getItem('access_token');
 let payload;
 let boardIds;
 
 parsePayload(WS_TOKEN);
-// Checkar om JWT finns i localstorage och hämtar payloaden
+//Check if the JWT is in local storage and retrieve the payload
 async function parsePayload(token) {
     if (token) {
         try {
@@ -30,8 +29,7 @@ const WS_URL = `ws://localhost:5500?access_token=${WS_TOKEN}&board=${boardIdsStr
 let noteText;
 let noteId;
 let noteColor;
-// Hämtar notes för den boarden som sparats i localstorage 
-// och när man bytit board via dropdown
+//Retrieve the notes from the board saved in localStorage
 async function getNotes() {
     try {
         const boardId = localStorage.getItem('currentBoard');
@@ -55,6 +53,7 @@ async function getNotes() {
         console.error(error);
     }
 }
+//Post the notes
 async function postNote() {
     try {
         const boardId = localStorage.getItem('currentBoard');
