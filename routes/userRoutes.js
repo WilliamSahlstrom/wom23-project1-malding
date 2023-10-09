@@ -58,10 +58,10 @@ router.post('/', async (req, res) => {
                     boards: req.body.id,
                     name: "New board"
                 }
-            },
-        },
-    })
-    console.log("user created:", user)
+            }
+        }
+    });
+    console.log("user created:", user);
     res.send({ msg: 'user created', id: user.id });
 })
 
@@ -82,12 +82,12 @@ router.patch('/:id', async (req, res) => {
 
         const user = await prisma.user.update({
             where: {
-                id: req.params.id,
+                id: req.params.id
             },
             data: {
                 password: hash,
                 updatedAt: new Date()
-            },
+            }
         });
 
         const token = await jwt.sign({
@@ -118,23 +118,23 @@ router.delete('/:id', async (req, res) => {
 
         const user = await prisma.users.delete({
             where: {
-                id: req.params.id,
+                id: req.params.id
             }
-        })
+        });
         res.send({
             msg: 'deleted',
             id: req.params.id,
             user: user
-        })
+        });
     } catch (err) {
 
         console.log(err)
         res.send({
             msg: 'ERROR',
             error: err
-        })
+        });
     }
-})
+});
 
 
 module.exports = router

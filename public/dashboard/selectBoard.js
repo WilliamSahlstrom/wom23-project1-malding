@@ -8,17 +8,17 @@ function addBoardsFromArray(boardData) {
     // Clear existing options
     dropdown.innerHTML = "";
 
-    // Add options from the array
+    // Add options to dropdown from the array with boards
     boardData.forEach(function (board) {
         var option = document.createElement("option");
-        option.value = board.name; // Use board name for dropdown
-        option.text = board.name; // Use board name for dropdown
-        option.setAttribute("id", board.id); // Set board ID as an attribute
+        option.value = board.name;
+        option.text = board.name;
+        option.setAttribute("id", board.id);
         dropdown.add(option);
 
-        // Create corresponding boards in the document
+        // Create boards in the document
         var boardDiv = document.createElement("div");
-        boardDiv.id = board.name; // Use board name for div ID
+        boardDiv.id = board.name;
         boardDiv.className = "board";
         document.body.appendChild(boardDiv);
     });

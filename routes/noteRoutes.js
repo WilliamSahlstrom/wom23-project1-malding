@@ -11,7 +11,7 @@ router.get('/:id', async (req, res) => {
                 boardIds: {
                     hasSome: [req.params.id]
                 }
-            },
+            }
         });
         res.send({
             msg: 'Success',
@@ -34,7 +34,7 @@ router.post('/:id', async (req, res) => {
                 text: req.body.text,
                 color: req.body.color,
                 boards: {
-                    connect: { id: req.params.id },
+                    connect: { id: req.params.id }
                 }
             }
         });
@@ -83,7 +83,7 @@ router.delete('/:id', async (req, res) => {
         // Find the note to get associated board ID
         const note = await prisma.note.findUnique({
             where: { id: noteIdToDelete },
-            include: { boards: true },
+            include: { boards: true }
         });
 
         if (!note) {
@@ -102,30 +102,30 @@ router.delete('/:id', async (req, res) => {
             where: {
                 id: boardId
             }
-        })
+        });
 
-        const boardNoteIdsArray = board.noteIds
-        const indexToRemove = boardNoteIdsArray.indexOf(noteIdToDelete)
-        if (indexToRemove !== -1) boardNoteIdsArray.splice(indexToRemove, 1)
+        const boardNoteIdsArray = board.noteIds;
+        const indexToRemove = boardNoteIdsArray.indexOf(noteIdToDelete);
+        if (indexToRemove !== -1) boardNoteIdsArray.splice(indexToRemove, 1);
 
         // Remove the note ID from the `noteIds` array in the associated board
         await prisma.board.update({
             where: {
-                id: boardId,
+                id: boardId
             },
             data: {
                 notes: {
-                    deleteMany: [{ id: noteIdToDelete }],
+                    deleteMany: [{ id: noteIdToDelete }]
                 },
                 noteIds: boardNoteIdsArray,
-            },
+            }
         });
 
         // Delete the note
         await prisma.note.delete({
             where: {
                 id: noteIdToDelete
-            },
+            }
         });
 
         res.send({

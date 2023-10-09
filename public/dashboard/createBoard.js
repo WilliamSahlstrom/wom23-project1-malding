@@ -28,8 +28,6 @@ createNewBoardForm.addEventListener('submit', async (event) => {
     // Get the value entered by the user for the new board name
     const newBoardName = newBoardNameInput.value;
 
-    // Perform validation if needed
-
     try {
         // Send a POST request to create a new board
         const response = await fetch('http://localhost:3030/boards', {

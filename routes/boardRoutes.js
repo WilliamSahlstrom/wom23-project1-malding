@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: (req.authUser.sub) }
-        })
+        });
 
         const boards = await prisma.board.findMany({
             where: {
@@ -72,7 +72,7 @@ router.post('/', async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: (req.authUser.sub) }
-        })
+        });
         const board = await prisma.board.create({
             data: {
                 name: req.body.name || "New board",
@@ -109,7 +109,7 @@ router.patch('/:id', async (req, res) => {
         const user = await prisma.user.findUnique({
             where: {
                 email: req.body.email,
-            },
+            }
         });
 
         if (!user) {

@@ -20,7 +20,7 @@ async function parsePayload(token) {
 }
 
 
-const boardIdsString = boardIds.join('&board=')
+const boardIdsString = boardIds.join('&board=');
 // Construct the URL with boardIds as URL parameters
 const baseUrl = `wss://malding-ws-api.azurewebsites.net?access_token=${WS_TOKEN}`;
 const WS_URL = `ws://localhost:5500?access_token=${WS_TOKEN}&board=${boardIdsString}`;
@@ -75,7 +75,7 @@ async function postNote() {
             // Now, call the function to send the WebSocket message
             sendWebSocketMessage(data.note);
         } else {
-            console.error("not good :(");
+            console.error(`Failed to create note`);
         }
     } catch (error) {
         console.error(error);
@@ -138,11 +138,11 @@ async function patchNoteColorInDatabase(noteId, newColor) {
         });
         if (response.ok) {
             const data = await response.json();
-            const noteDiv = document.querySelector(`[data-note-id="${noteId}"]`)
+            const noteDiv = document.querySelector(`[data-note-id="${noteId}"]`);
             // Set the background color using setAttribute
-            noteDiv.setAttribute('style', `background-color: ${newColor}`)
+            noteDiv.setAttribute('style', `background-color: ${newColor}`);
             // Call a function to Websocket server for broadcasting the color change
-            await sendWebSocketEditMessage(data.note)
+            await sendWebSocketEditMessage(data.note);
         } else {
             console.error(`Failed to patch note color with ID ${noteId}.`);
         }
@@ -221,7 +221,7 @@ socket.onclose = function (event) {
 // Function to send WebSocket creation message
 async function sendWebSocketUpdateMyClient(data) {
     if (socket.readyState === WebSocket.OPEN) {
-        // Send a WebSocket message to the server to broadcast the note creation
+        // WebSocket message to broadcast the note creation
         socket.send(JSON.stringify({
             type: 'updateUserToBoard',
             board: data.board

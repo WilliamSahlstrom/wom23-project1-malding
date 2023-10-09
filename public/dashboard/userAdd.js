@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     confirmAddUserBtn.addEventListener('click', async function () {
         // Addar en användare till den boarden man är på och stänger popup windown
         const userEmail = userEmailInput.value;
-        addUser(userEmail)
+        addUser(userEmail);
         addUserPopup.style.display = 'none';
     });
 

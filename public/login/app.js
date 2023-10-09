@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: JSON.stringify({
                     email: email,
                     password: password,
-                }),
+                })
             });
 
             if (response.ok) {
