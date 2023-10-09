@@ -190,6 +190,16 @@ socket.onmessage = function (event) {
         divRemove(data.id);
     }
 
+    if (data.type === 'moveNote') {
+        const noteElement = document.querySelector(`[data-note-id="${data.id}"]`)
+        if (noteElement) {
+            // Set the new position of the note based on the mouse cursor position
+            noteElement.style.position = 'absolute';
+            noteElement.style.left = data.position.left;
+            noteElement.style.top = data.position.top;
+        }
+    }
+
     if (data.type === 'selectBoard') {
         test();
     }
