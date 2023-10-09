@@ -27,7 +27,6 @@ createNewBoardForm.addEventListener('submit', async (event) => {
 
     // Get the value entered by the user for the new board name
     const newBoardName = newBoardNameInput.value;
-    console.log(newBoardName);
 
     // Perform validation if needed
 

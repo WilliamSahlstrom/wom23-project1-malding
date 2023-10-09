@@ -15,9 +15,6 @@ async function addUser(userEmail) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(`${userEmail} added to board`);
-            console.log(data.board.id)
-            console.log(data.user.email)
             sendWebSocketAddUserMessage(data)
         } else {
             console.error("not good :(");
@@ -53,11 +50,8 @@ async function updateAddedUsersClient(userEmail) {
         });
         if (response.ok) {
             const data = await response.json()
-            console.log(data.token)
             localStorage.setItem("access_token", data.token)
             WS_TOKEN = localStorage.getItem("access_token")
-            console.log(data.boards)
-            console.log(`A board has been added to ${userEmail}`)
             parsePayload(WS_TOKEN)
             createArrayFromBoards(boardIds)
         } else {

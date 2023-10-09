@@ -71,7 +71,6 @@ function divStyle(note) {
             if (!event.target.classList.contains('colorButton')) {
                 // Get the note's ID from the data attribute
                 const noteId = div.getAttribute('data-note-id');
-                console.log(noteId);
                 // Call a function to delete the note from the database
                 await deleteNoteFromDatabase(noteId);
                 // Call a function to Websocket server for broadcasting the deletion
@@ -186,10 +185,8 @@ function divStyle(note) {
 
 // Function to remove a note by its ID
 function divRemove(noteId) {
-    console.log('Removing note with ID:', noteId)
     const noteElement = document.querySelector(`[data-note-id="${noteId}"]`)
     if (noteElement) {
-        console.log('Found element to remove:', noteElement)
         noteElement.remove()
     } else {
         console.log('Note element not found for ID:', noteId)
@@ -198,10 +195,8 @@ function divRemove(noteId) {
 
 // Function to edit a note
 function divEdit(note) {
-    console.log('Editing note with ID:', note.id)
     const noteElement = document.querySelector(`[data-note-id="${note.id}"]`)
     if (noteElement) {
-        console.log('Found element to edit:', noteElement)
         noteElement.querySelector('h3').innerHTML = note.text
         noteElement.setAttribute('style', `background-color: ${note.color}`);
     } else {

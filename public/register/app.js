@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     const registerForm = document.querySelector("#send"); // Change to "#send" to match the button ID
-    const statusElement = document.querySelector("#status");
 
     registerForm.addEventListener("click", async function (event) { // Change to "click" event
         event.preventDefault();
@@ -32,7 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 alert("Registration successful!");
-                // You can redirect the user to the login page or perform other actions here.
+                // Redirect to the dashboard page
+                window.location.href = "/public/login/index.html";
             } else {
                 const data = await response.json();
                 alert(`Registration failed: ${data.error}`);

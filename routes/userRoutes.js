@@ -7,27 +7,6 @@ const { verifyToken } = require('../middleware/auth')
 const prisma = new PrismaClient()
 require('dotenv').config()
 
-// disable for production?
-router.get('/', async (req, res) => {
-    const users = await prisma.users.findMany()
-    console.log("users GET")
-    res.send({
-        msg: 'users',
-        users: users
-    })
-})
-
-// restrict for production
-router.get('/:id', async (req, res) => {
-
-    const user = await prisma.user.findUnique({
-        where: { id: req.params.id }
-    })
-
-    console.log("users GET ONE")
-    res.send({ msg: 'users', user: user })
-})
-
 router.post('/login',async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
@@ -76,7 +55,8 @@ router.post('/', async (req, res) => {
             password: hash,
             boards: {
                 create: {
-                    boards: req.body.id
+                    boards: req.body.id,
+                    name: "New board"
                 }
             },
         },

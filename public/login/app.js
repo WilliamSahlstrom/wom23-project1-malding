@@ -22,12 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 const data = await response.json();
-                statusElement.innerHTML = `Welcome ${data.userEmail.split("@")[0]}!<p>Your JWT: <pre>${data.token}</pre></p>`;
+                statusElement.innerHTML = `Welcome ${data.userEmail.split("@")[0]}!`;
                 localStorage.setItem("access_token", data.token);
                 // Redirect to the dashboard page
                 window.location.href = "/public/dashboard/index.html";
 
-                console.log(data);
             } else {
                 statusElement.innerHTML = "Login failed. Please check your credentials.";
                 console.error("Login failed");

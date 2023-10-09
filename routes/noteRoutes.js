@@ -107,7 +107,6 @@ router.delete('/:id', async (req, res) => {
         const boardNoteIdsArray = board.noteIds
         const indexToRemove = boardNoteIdsArray.indexOf(noteIdToDelete)
         if (indexToRemove !== -1) boardNoteIdsArray.splice(indexToRemove, 1)
-        console.log("New noteIds", boardNoteIdsArray)
 
         // Remove the note ID from the `noteIds` array in the associated board
         await prisma.board.update({

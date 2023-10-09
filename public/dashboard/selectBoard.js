@@ -90,7 +90,6 @@ async function changeBoard() {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(data.notes);
             data.notes.forEach(note => {
                 divStyle(note);
             });
