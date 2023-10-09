@@ -1,7 +1,6 @@
 require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
-const morgan = require('morgan');
 const userRoutes = require('./routes/userRoutes');
 const boardRoutes = require('./routes/boardRoutes');
 const noteRoutes = require('./routes/noteRoutes');
@@ -11,7 +10,6 @@ const app = express();
 const port = process.env.PORT || 3030;
 app.use(cors());
 app.use(express.json());
-app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
     console.log(`GET request to / from ${req.ip}`)
