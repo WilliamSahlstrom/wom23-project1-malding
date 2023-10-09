@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, user.secret)
+        }, process.env.SECRET)
 
         res.send({
             msg: 'Success',
@@ -75,7 +75,7 @@ router.post('/', async (req, res) => {
         })
         const board = await prisma.board.create({
             data: {
-                name: req.body.name,
+                name: req.body.name || "New board",
                 users: {
                     connect: { id: req.authUser.sub },
                 }
@@ -86,7 +86,7 @@ router.post('/', async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, user.secret)
+        }, process.env.SECRET)
         res.send({
             msg: 'Success',
             board: board,
@@ -132,7 +132,8 @@ router.patch('/:id', async (req, res) => {
         });
         res.send({
             msg: 'Success',
-            board: board
+            board: board,
+            user: user
         });
     } catch (error) {
         console.error(error);

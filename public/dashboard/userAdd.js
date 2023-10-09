@@ -16,7 +16,9 @@ async function addUser(userEmail) {
         if (response.ok) {
             const data = await response.json();
             console.log(`${userEmail} added to board`);
-            sendWebSocketAddUserMessage(userEmail)
+            console.log(data.board.id)
+            console.log(data.user.email)
+            sendWebSocketAddUserMessage(data)
         } else {
             console.error("not good :(");
         }
@@ -26,12 +28,13 @@ async function addUser(userEmail) {
 }
 
 // Skickar datan till websocket servern
-async function sendWebSocketAddUserMessage(userEmail) {
+async function sendWebSocketAddUserMessage(data) {
     if (socket.readyState === WebSocket.OPEN) {
         // Datan som blir broadcastad till varje client
         socket.send(JSON.stringify({
             type: 'addUser',
-            email: userEmail
+            email: data.user.email,
+            board: data.board.id
         }));
     } else {
         console.error('WebSocket is not open yet. Wait for the connection to establish.');

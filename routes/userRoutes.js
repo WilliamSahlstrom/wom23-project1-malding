@@ -49,7 +49,7 @@ router.post('/login',async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, user.secret)
+        }, process.env.SECRET)
 
         res.send({
             token: token,
@@ -69,12 +69,6 @@ router.post('/', async (req, res) => {
 
     const hash = await bcrypt.hash(req.body.password, 12)
 
-    const generateJWTSecret = () => {
-        //return require('crypto').randomBytes(48).toString('hex')
-        return "acd6ccf64e4684d398f6ffa240bc68577110650ff3b901657c4f9d9e2c8450f4368d7fa29b4b43ce728afc47d54dce4b"
-    }
-    const secretKey = generateJWTSecret()
-
     const user = await prisma.user.create({
         data: {
             email: req.body.email,
@@ -85,7 +79,6 @@ router.post('/', async (req, res) => {
                     boards: req.body.id
                 }
             },
-            secret: secretKey
         },
     })
     console.log("user created:", user)
@@ -122,7 +115,7 @@ router.patch('/:id', async (req, res) => {
             email: user.email,
             name: user.name,
             boardIds: user.boardIds
-        }, user.secret)
+        }, process.env.SECRET)
 
         return res.send({
             msg: 'patch',

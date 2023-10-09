@@ -62,6 +62,7 @@ createNewBoardForm.addEventListener('submit', async (event) => {
             dropdown.appendChild(newOption);
             // Close the "Create New Board" popup
             closeCreateNewBoardPopup();
+            sendWebSocketUpdateMyClient(data)
         } else {
             // Handle errors if the board creation request fails
             alert('Board creation failed. Please try again.');

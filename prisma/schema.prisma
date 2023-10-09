@@ -15,7 +15,6 @@ model User {
   email     String    @unique
   password  String
   name      String?
-  secret    String
   boards    Board[]   @relation(fields: [boardIds], references: [id])
   boardIds  String[]  @db.ObjectId
   createdAt DateTime  @default(now())

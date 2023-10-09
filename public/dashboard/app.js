@@ -11,9 +11,7 @@ async function parsePayload(token) {
             const tokenParts = token.split('.')
             payload = JSON.parse(atob(tokenParts[1]))
             boardIds = payload.boardIds
-            console.log("här: ", boardIds, payload.email, payload.sub, payload.password)
             localStorage.setItem('currentBoard', boardIds[0])
-            localStorage.setItem('userEmail', payload.email)
         } catch (e) {
             console.error(e)
         }
@@ -205,7 +203,10 @@ socket.onmessage = function (event) {
     }
 
     if (data.type === 'addUser') {
-        if (data.email === payload.email) updateAddedUsersClient(data.email)
+        if (data.email === payload.email) {
+            updateAddedUsersClient(data.email)
+            sendWebSocketUpdateMyClient(data)
+        }
     }
 
     if (data.type === 'error') {
@@ -227,3 +228,16 @@ socket.onclose = function (event) {
         console.error('Connection abruptly closed');
     }
 };
+
+// Function to send WebSocket creation message
+async function sendWebSocketUpdateMyClient(data) {
+    if (socket.readyState === WebSocket.OPEN) {
+        // Send a WebSocket message to the server to broadcast the note creation
+        socket.send(JSON.stringify({
+            type: 'updateUserToBoard',
+            board: data.board
+        }));
+    } else {
+        console.error('WebSocket is not open yet. Wait for the connection to establish.');
+    }
+}

@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const verifyToken = (req, res, next) => {
-    console.log('auth middleware');
     try {
         // Check if the Authorization header is present
         const authHeader = req.headers.authorization;
@@ -20,12 +19,11 @@ const verifyToken = (req, res, next) => {
         const token = tokenParts[1];
 
         // Verify the token and extract user information
-        const authUser = jwt.verify(token, process.env.JWT_SECRET);
+        const authUser = jwt.verify(token, process.env.SECRET);
 
         // Attach user information to the request object
         req.authUser = authUser;
 
-        console.log(authUser);
         next();
     } catch (error) {
         console.error("JWT token validation error:", error.message);
