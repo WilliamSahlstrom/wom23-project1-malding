@@ -1,26 +1,31 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', 'sans-serif';
 }
+
 :root {
     --size: 300px;
 }
+
 body {
     background: #2f363e;
 }
+
 .dropdown-container {
     position: absolute;
-    top: 10px; 
-    right: 10px; 
-    background-color: #ffffff; 
+    top: 10px;
+    right: 10px;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
+
 .container {
     position: relative;
     width: 100%;
@@ -33,6 +38,7 @@ body {
     padding: 50px;
 
 }
+
 .container .notes {
     display: flex;
     flex-wrap: wrap;
@@ -41,22 +47,34 @@ body {
     align-items: flex-start;
     margin-top: 170px;
 }
+
 .notes .note {
     position: absolute;
     cursor: grab;
 }
+
 .notes .note:active {
     cursor: grabbing;
 }
+
 .container .notes .note {
     position: relative;
     width: var(--size);
     height: var(--size);
     background-color: RGB(255, 61, 232);
     padding: 20px;
-    box-shadow: 0 15px 35px rgba(255,255,255,0.25);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.25);
     font-family: 'Handlee', cursive;
 }
+
+.container .notes .note .note-text {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 12em;
+}
+
 .container .notes .note::before {
     content: 'Double Click to Remove This Note';
     position: absolute;
@@ -71,24 +89,28 @@ body {
     opacity: 0;
     transition: 0.5s;
 }
+
 .container .notes .note:hover::before {
     opacity: 1;
 }
+
 #create {
     position: relative;
     width: var(--size);
     height: var(--size);
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.15);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 6em;
     cursor: pointer;
 }
+
 #create i {
     position: absolute;
     color: #fff;
 }
+
 .createBox {
     position: relative;
     width: var(--size);
@@ -96,6 +118,7 @@ body {
     z-index: 1000;
     display: none;
 }
+
 .createBox textarea {
     position: absolute;
     top: 0;
@@ -107,11 +130,13 @@ body {
     font-size: 0.2em;
     resize: none;
 }
+
 .details h3 {
     font-family: 'Handlee', cursive;
     user-select: none;
     font-size: 1.45em;
 }
+
 .popup-container {
     display: none;
     position: fixed;
@@ -123,53 +148,63 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 1000;
- }
- .popup {
+}
+
+.popup {
     background: #fff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
- }
- .popup-buttons {
+}
+
+.popup-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
- }
-#confirmDeleteBtn, #cancelDeleteBtn, #confirmAddUserBtn, #cancelAddUserBtn {
+}
+
+#confirmDeleteBtn,
+#cancelDeleteBtn,
+#confirmAddUserBtn,
+#cancelAddUserBtn {
     padding: 10px 20px;
     cursor: pointer;
     border: none;
     border-radius: 5px;
 }
+
 #confirmDeleteBtn {
     background-color: #e74c3c;
     color: #fff;
 }
+
 #cancelDeleteBtn {
     background-color: #3498db;
     color: #fff;
 }
+
 #confirmAddUserBtn,
 #cancelAddUserBtn {
-   padding: 10px 20px;
-   cursor: pointer;
-   border: none;
-   border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
 }
 
 #confirmAddUserBtn {
-   background-color: #2ecc71;
-   color: #fff;
+    background-color: #2ecc71;
+    color: #fff;
 }
 
 #cancelAddUserBtn {
-   background-color: #e74c3c;
-   color: #fff;
+    background-color: #e74c3c;
+    color: #fff;
 }
 
 .popup .popup-text {
     text-align: center;
 }
+
 #addUserPopup {
     display: none;
 }
@@ -189,6 +224,7 @@ body {
     display: flex;
     justify-content: space-between;
 }
+
 #addUserBtn {
     padding: 10px 20px;
     cursor: pointer;
@@ -196,7 +232,8 @@ body {
     color: #fff;
     border: none;
     border-radius: 5px;
-    margin-top: 10px; /* Adjust as needed */
+    margin-top: 10px;
+    /* Adjust as needed */
 }
 
 #addUserBtn:hover {
@@ -211,8 +248,10 @@ body {
     border: none;
     border-radius: 5px;
     position: absolute;
-    top: 100px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
+    top: 100px;
+    /* Adjust as needed */
+    right: 10px;
+    /* Adjust as needed */
 }
 
 #changePasswordBtn:hover {
@@ -304,7 +343,8 @@ body {
 }
 
 #createNewBoard:hover {
-    background-color: #2980b9; /* Darker shade on hover */
+    background-color: #2980b9;
+    /* Darker shade on hover */
 }
 
 /* Style the Create New Board popup container */
@@ -358,7 +398,8 @@ body {
 
 /* Style the Create Board button within the popup */
 #createNewBoardForm button[type="submit"] {
-    background-color: #3498db; /* Primary color */
+    background-color: #3498db;
+    /* Primary color */
     color: #fff;
     padding: 10px;
     border: none;
@@ -369,12 +410,14 @@ body {
 
 /* Style the Create Board button on hover within the popup */
 #createNewBoardForm button[type="submit"]:hover {
-    background-color: #2980b9; /* Darker shade on hover */
+    background-color: #2980b9;
+    /* Darker shade on hover */
 }
 
 /* Style the Close button within the popup */
 #closeCreateNewBoardPopup {
-    background-color: #e74c3c; /* Danger color */
+    background-color: #e74c3c;
+    /* Danger color */
     color: #fff;
     padding: 10px;
     border: none;
@@ -386,6 +429,6 @@ body {
 
 /* Style the Close button on hover within the popup */
 #closeCreateNewBoardPopup:hover {
-    background-color: #c0392b; /* Darker shade on hover */
+    background-color: #c0392b;
+    /* Darker shade on hover */
 }
-

@@ -44,15 +44,19 @@ function divStyle(note) {
     // Track whether the note is being edited
     div.setAttribute('data-editing', 'false');
     div.setAttribute('draggable', 'true');
-    // Add a 'dragstart' event listener to initiate the drag operation
     div.addEventListener('dragstart', function (event) {
-        event.dataTransfer.setData('text/plain', note.id);
+        // Check if the note is being edited, and if so, prevent the drag operation
+        if (div.getAttribute('data-editing') === 'false') {
+            event.dataTransfer.setData('text/plain', note.id);
+        } else {
+            event.preventDefault();
+        }
     });
     // Set the inner HTML with a div for the note, h3 for its text, and a button for color cycling
     div.innerHTML = `
         <div class="details">
             <button class="colorButton"></button>
-            <h3 contenteditable="false">${note.text}</h3>
+            <h3 class="note-text" contenteditable="false">${note.text}</h3>
         </div>
     `;
     // Set the background color of the note
@@ -123,7 +127,7 @@ function divStyle(note) {
             if (div.getAttribute('data-editing') === 'false') {
                 div.setAttribute('data-editing', 'true');
                 const h3 = div.querySelector('h3');
-                h3.contentEditable = 'true';
+                h3.contentEditable = 'plaintext-only';
                 h3.focus();
 
                 // Add a 'keydown' event listener to the h3 element for finishing editing
