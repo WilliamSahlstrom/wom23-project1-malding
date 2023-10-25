@@ -1,0 +1,18 @@
+{
+    "source": {
+        "include": [
+            "./middleware/auth.js",
+            "./public/login/app.js",
+            "./public/register/app.js",
+            "./server.js",
+            "./routes/boardRoutes.js",
+            "./routes/userRoutes.js"
+        ],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "opts": {
+        "destination": "./out",
+        "recurse": true
+    }
+}

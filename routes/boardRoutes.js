@@ -3,12 +3,16 @@ const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// GET all boards
+/**
+ * Retrieve all boards associated with the authenticated user.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 router.get('/', async (req, res) => {
     try {
         const boards = await prisma.board.findMany({
-            where: { 
-                userIds: { 
+            where: {
+                userIds: {
                     hasSome: [req.authUser.sub]
                 }
             }
@@ -27,7 +31,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET a single board by ID
+/**
+ * Retrieve a single board by its ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 router.get('/:id', async (req, res) => {
     try {
         const board = await prisma.board.findUnique({
@@ -53,7 +61,11 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create a new board
+/**
+ * Create a new board.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 router.post('/', async (req, res) => {
     try {
         const board = await prisma.board.create({
@@ -61,8 +73,8 @@ router.post('/', async (req, res) => {
                 name: req.body.name,
                 users: {
                     connect: { id: req.authUser.sub },
-                    }
                 }
+            }
         });
         res.send({
             msg: 'Success',
@@ -77,7 +89,11 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update a board by ID
+/**
+ * Update a board by its ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 router.patch('/:id', async (req, res) => {
     try {
         const board = await prisma.board.update({
@@ -101,7 +117,11 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
-// Delete a board by ID
+/**
+ * Delete a board by its ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const board = await prisma.board.delete({
