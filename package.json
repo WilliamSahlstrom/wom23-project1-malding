@@ -8,12 +8,15 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/**/*.test.js",
     "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
+    "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
     "prisma": "^5.3.1"
   },

@@ -1,0 +1,30 @@
+version: '3'
+services:
+  app:
+    image: sahlstrw/whiteboard-app:latest
+    container_name: node-app
+    ports:
+      - '3030:3030'
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=mongodb+srv://sahlstrw:Laarikuja2@cluster0.3wmj36p.mongodb.net/malding?retryWrites=true&w=majority
+    networks:
+      - app-network
+
+  database:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
