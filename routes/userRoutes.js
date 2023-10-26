@@ -48,6 +48,10 @@ router.post('/login', async (req, res) => {
         if (user == null) {
             return res.status(404).send({ msg: 'ERROR', error: 'User not found' });
         }
+        if (user.name === null) {
+            // Handle the case where the "name" is null
+            return res.status(500).json({ message: 'User data is incomplete' });
+        }
 
         const match = await bcrypt.compare(req.body.password, user.password);
 
